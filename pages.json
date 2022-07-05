@@ -1,7 +1,13 @@
 {
 	"pages": [
 		{
-		    "path" : "pages/person/index",
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+		    "path" : "pages/login/login",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",
@@ -9,7 +15,7 @@
 		    }
 		},
 		{
-		    "path" : "pages/login/login",
+		    "path" : "pages/person/index",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",
@@ -21,7 +27,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-				"enablePullDownRefresh": true
+                "enablePullDownRefresh": false
             }
         }
         ,{
@@ -50,13 +56,33 @@
                 "enablePullDownRefresh": false
             }
             
-        },
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		}
+        },{
+            "path" : "pages/admin/admin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/admin/admin-add",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/admin/admin-user",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
