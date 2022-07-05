@@ -45,14 +45,20 @@ export default {
 					reject(error);
 				}else{
                     // 相应拦截、根据后端的状态码来写，可以自行判断和封装
-					if(res.data.code === '400'){
+					if(res.data.code === 400){
 						uni.navigateTo({
 						    url: '/pages/login/login'
 						});
-					} else if (res.data.code === '500' || res.data.code === '501') {
-						
+						reject(res.data)
+					} else if (res.data.code === 500 || res.data.code === 501) {
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none',
+							duration: 2000
+						})
+						reject(res.data)
 					} else{
-						resolve(res.data); 
+						resolve(res.data)
 					}
 				}
 			});
