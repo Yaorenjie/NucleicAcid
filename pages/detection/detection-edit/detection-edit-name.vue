@@ -20,7 +20,6 @@
 				value: '',
 				// 校验表单数据
 				valiFormData: {
-					id: '',
 					name: '',
 				},
 				// 校验规则
@@ -34,19 +33,27 @@
 				}
 			}
 		},
+		computed: {
+			data () {
+				return this.$store.state.detectionData
+			}
+		},
 		onLoad(e){
 			if(e.id){
-				console.log(e.id)
 				this.id = e.id;
-				this.value = e.name
+			}
+			if (e.name) {
+				this.$set(this.valiFormData, 'name', e.name)
 			}
 		},
 		methods: {
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
+					this.$store.commit("update_detectionData_name", this.valiFormData.name);
+					uni.navigateTo({
+						url: '/pages/detection/detection-edit/detection-edit?id='+ this.id,
+						animationType: 'slide-in-right',
+						animationDuration: 200
 					})
 				}).catch(err => {
 					console.log('err', err);

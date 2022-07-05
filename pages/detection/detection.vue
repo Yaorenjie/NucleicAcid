@@ -1,5 +1,12 @@
 <template>
 	<view class="container">
+		<view class="input" type="text" placeholder="请选择地区">
+		        <picker class="pickerList" mode="multiSelector" :range="newProvinceDataList" range-key="value" :value="multiIndex"
+		            @change="pickerChange" @columnchange="pickerColumnchange">
+		            <view class="">{{select}}</view>
+		        </picker>
+		    </view>
+		<button type="default" @click="addCk">添加采样点</button>
 		<uni-card v-for="item in detectionList" class="detection-list" :title="item.name" :isFull="true" :sub-title="item.address" :extra="item.distance">
 			<view class="uni-flex uni-row uni-justify-center uni-align-center">
 				<view class="text">预计等待时间</view>
@@ -20,10 +27,12 @@
 				</view>
 			</view> -->
 		</uni-card>
+		<uni-load-more :status="status"></uni-load-more>
 	</view>
 </template>
 
 <script>
+	import provinceData from "@/common/provinceAndCity.js"
 	export default {
 		data() {
 			return {
@@ -65,13 +74,100 @@
 						distance: "3.6公里",
 						wait: '30'
 					}
-				]
+				],
+				search: {
+					page: 1,
+					size: 10,
+					province: '',
+					city: '',
+					area: '',
+					latitude: '',
+					longitude: ''
+				},
+				status: 'more',
+				total: 0,
+				oldpProvinceDataList: provinceData.data,
+				newProvinceDataList: [[],[],[]],
+				multiIndex: [0, 0, 0],
+				select: '选择地区'
 			}
 		},
+		onLoad() {
+			uni.startPullDownRefresh()
+			this.getList()
+			this.init()
+		},
+		onPullDownRefresh () {
+		    this.detectionList = []
+			this.search.page = 1
+		    this.getList()
+		    setTimeout(() => {
+		      uni.stopPullDownRefresh ();
+		    }, 1000);
+		},
+		onReachBottom(){
+			if(this.detectionList.length < this.total){
+				this.search.page ++;
+			    this.getList()
+			}
+		},			
 		methods: {
+			async init() {
+				await this.getCity(0, 0)
+				await this.getCity(1, this.newProvinceDataList[0][0].key)
+				await this.getCity(2, this.newProvinceDataList[1][0].key)
+			},
+			async getCity(index, pid) {
+				const data = await this.$http.httpGet('/admin/location_opt/', {
+					pid: pid
+				})
+				this.$set(this.newProvinceDataList, index, data)
+				console.log(data)
+			},
+			async getList() {
+				this.status = 'loading';
+				const data = await this.$http.httpGet('/admin/point/', this.search)
+				console.log(data)
+				this.total = data.total
+				this.detectionList = data.data
+				if(this.detectionList.length >= this.total) this.status = 'noMore'
+			},
 			actionsEdit(id){
 				uni.navigateTo({
 					url: 'detection-edit/detection-edit?id='+id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+		    pickerChange (e) {
+			    var _this = this
+			    _this.multiIndex = e.detail.value
+			    _this.select =
+			        _this.newProvinceDataList[0][_this.multiIndex[0]].value + "---" +
+			        _this.newProvinceDataList[1][_this.multiIndex[1]].value + "---" +
+			        _this.newProvinceDataList[2][_this.multiIndex[2]].value
+			},
+			async pickerColumnchange(e) {
+				if (e.detail.column === 0) {
+					this.multiIndex[0] = e.detail.value
+					this.multiIndex[1] = 0
+					this.multiIndex[2] = 0
+					await this.getCity(1, this.newProvinceDataList[0][this.multiIndex[0]].key)
+					await this.getCity(2, this.newProvinceDataList[1][0].key)
+				}
+				if (e.detail.column === 1) {
+					this.multiIndex[1] = e.detail.value
+					this.multiIndex[2] = 0
+					await this.getCity(2, this.newProvinceDataList[1][e.detail.value].key)
+				}
+				if (e.detail.column === 2) {
+					this.multiIndex[2] = e.detail.value
+				}
+				console.log(this.multiIndex)
+			},
+			addCk () {
+				uni.navigateTo({
+					url: 'detection-edit/detection-edit',
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})

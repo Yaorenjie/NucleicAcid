@@ -6,7 +6,7 @@
 					<view class="uni-list-item__content">
 						<text class="uni-list-item__content-title">{{item.name}}</text>
 					</view>
-					<view class="uni-list-item__extra">
+					<view class="uni-list-item__extra" @click="urlCk(item.url)">
 						<uni-icons type="right" size="20"></uni-icons>
 					</view>
 				</view>
@@ -64,6 +64,7 @@
 					},
 					{
 						name: "采样点管理",
+						url: "/pages/detection/detection"
 					},
 				],
 				loading: false
@@ -75,6 +76,11 @@
 			}
 		},
 		methods: {
+			urlCk (url) {
+				uni.navigateTo({
+				    url: url	
+				})
+			},
 			logOut() {
 				if (this.loading) return
 				this.loading = true
