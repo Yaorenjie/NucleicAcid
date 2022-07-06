@@ -41,8 +41,8 @@
                 "enablePullDownRefresh": false
             }
             
-        }
-        ,{
+        },
+		{
             "path" : "pages/detection/detection-edit/detection-edit-address",
             "style" :                                                                                    
             {
@@ -50,7 +50,53 @@
                 "enablePullDownRefresh": false
             }
             
-        },{
+        },
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-rate",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-time",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-wait",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-window",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/administrators/list",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true
+		    }
+		    
+		},
+		{
             "path" : "pages/admin/admin",
             "style" :                                                                                    
             {

@@ -61,6 +61,7 @@
 					},
 					{
 						name: "管理员管理",
+						url: "/pages/administrators/list"
 					},
 					{
 						name: "采样点管理",

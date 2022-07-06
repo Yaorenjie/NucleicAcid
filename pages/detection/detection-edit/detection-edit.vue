@@ -13,8 +13,10 @@
 			<uni-list-item showArrow title="总排队人数" :rightText="data.wait ? `${data.wait}个` : ''" clickable @click="actionsWait" />
 			<view class="uni-list-cell uni-list-cell-pd">
 				<view class="uni-list-cell-db">是否启用</view>
-				<switch checked @change="actionsEnable" />
+				<switch :checked="data.state === 1 ? true : false" @change="actionsEnable" />
 			</view>
+			<button type="primary" @click="cancel()">取消</button>
+			<button type="primary" @click="submit()">提交</button>
 		</uni-list>
 	</view>
 </template>
@@ -34,12 +36,17 @@
 		},
 		onLoad(e){
 			if(e.id){
-				this.id = e.id;
+				this.id = e.id
+				this.getData()
 			}
 		},
 		methods: {
+			async getData () {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/')
+				this.$store.commit("update_detectionData", data.data)
+			},
 			actionsEnable(e){
-				console.log('switch2 发生 change 事件，携带值为', e.detail.value)
+				this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
 			},
 			actionsName(){
 				uni.navigateTo({
@@ -83,6 +90,35 @@
 					animationDuration: 200
 				})
 			},
+			cancel () {
+				this.$store.commit("update_detectionData", {
+					name: '',
+					address: '',
+					window: '',
+					wait: '',
+					rate: '',
+					time: [],
+					state: 1,
+					latitude: '',
+					longitude: ''
+				})
+			},
+			async submit () {
+				const data = await this.$http.httpPost('/admin/point/', {
+					...this.data,
+					...{
+						province: 0,
+						city: 0,
+						area: 0
+					}
+				})
+				this.cancel()
+				uni.navigateTo({
+					url: '/pages/detection/detection',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			}
 		}
 	}
 </script>

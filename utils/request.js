@@ -76,5 +76,12 @@ export default {
 			data: data,
 			method: "POST"
 		});
-	}
+	},
+	put(url="",data={}){
+		return this.send({
+			url: url,
+			data: data,
+			method: "PUT"
+		});
+	},
 };
