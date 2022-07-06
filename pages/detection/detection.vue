@@ -32,7 +32,6 @@
 </template>
 
 <script>
-	import provinceData from "@/common/provinceAndCity.js"
 	export default {
 		data() {
 			return {
@@ -86,7 +85,7 @@
 				},
 				status: 'more',
 				total: 0,
-				oldpProvinceDataList: provinceData.data,
+				oldpProvinceDataList: [],
 				newProvinceDataList: [[],[],[]],
 				multiIndex: [0, 0, 0],
 				select: '选择地区'

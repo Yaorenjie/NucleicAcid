@@ -1,12 +1,6 @@
 {
 	"pages": [
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
-		{
 		    "path" : "pages/login/login",
 		    "style" :                                                                                    
 		    {
@@ -27,7 +21,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
         }
         ,{
@@ -80,7 +74,13 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-        }
+        },
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
