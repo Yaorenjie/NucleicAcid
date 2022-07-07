@@ -72,7 +72,6 @@
 				this.$refs.form.validate().then(valid=>{
 					if (valid) {
 						this.loginAjax()
-					    console.log('验证通过');
 				    }
 				}).catch(err =>{
 					console.log('表单错误信息：', err);
