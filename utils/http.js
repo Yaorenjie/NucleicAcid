@@ -20,3 +20,12 @@ export function httpPost(url, params) {
       });
   });
 }
+export function httpPut(url, params) {
+  return new Promise((resolve, reject)=>{
+      request.put(url, params).then((result)=>{
+          resolve(result)
+      }).catch(err=>{
+          reject(err)
+      });
+  });
+}

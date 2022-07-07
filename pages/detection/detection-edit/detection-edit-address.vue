@@ -30,11 +30,10 @@
 				type: '',
 				// 校验表单数据
 				valiFormData: {
-					id: 0,
-					name: '雅居乐花园',
-					address: '四川省成都市天府新区麓山大道二段19号成都雅居乐花园',
-					lat: 39.9085,
-					long: 116.39747,
+					id: '',
+					address: '',
+					lat: '',
+					long: '',
 				},
 				// 校验规则
 				rules: {
@@ -53,11 +52,17 @@
 				}
 			}
 		},
+		computed: {
+			data () {
+				return this.$store.state.detectionData
+			}
+		},
 		onLoad(e){
 			if(e.id){
-				console.log(e.id)
-				this.id = e.id;
-				this.value = e.name
+				this.valiFormData.id = e.id;
+				this.valiFormData.address = e.address
+				this.valiFormData.lat = e.lat;
+				this.valiFormData.long = e.long
 			}
 		},
 		methods: {
@@ -74,8 +79,8 @@
 				uni.chooseLocation({
 					keyword: this.valiFormData.address,
 					// address: this.valiFormData.address,
-					// latitude: this.valiFormData.lat,
-					// longitude: this.valiFormData.long,
+					latitude: this.valiFormData.lat,
+					longitude: this.valiFormData.long,
 					// name: this.valiFormData.name,
 					success: (res) => {
 						this.$set(this.valiFormData, 'address', res.address)
@@ -197,8 +202,11 @@
 			    this.hasLocation = false
 			},
 			submit() {
-				uni.showToast({
-					title: `校验通过`
+				this.$store.commit("update_detectionData_address", this.valiFormData);
+				uni.navigateTo({
+					url: '/pages/detection/detection-edit/detection-edit?id='+ this.id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
 				})
 			}
 		}

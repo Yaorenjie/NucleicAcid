@@ -65,6 +65,8 @@
 				}
 			}
 		},
+		created() {
+		},
 		methods: {
 			login() {
 				this.$refs.form.validate().then(valid=>{
@@ -82,13 +84,18 @@
 					password: this.formData.password
 				}).then((res) => {
 					this.$store.commit("UPDATEUSERS", res);
+					this.getPermission()
 					uni.navigateTo({
-					    url: '/pages/index/index'
+					    url: '/pages/person/index'
 					});
 				})
 				.catch((error) => {
 				  console.log(error);
 				});
+			},
+			async getPermission() {
+				const data = await this.$http.httpGet('/permission/')
+				this.$store.commit("UPDATEPERMISSION", data);
 			}
 		}
 	}

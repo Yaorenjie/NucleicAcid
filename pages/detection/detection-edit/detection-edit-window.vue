@@ -1,14 +1,16 @@
 <template>
 	<view>
-		<view class="uni-edit-form">
-			<!-- 基础表单校验 -->
-			<uni-forms ref="valiForm" :rules="rules" :modelValue="valiFormData">
-				<uni-forms-item name="name">
-					<uni-easyinput v-model="valiFormData.name" />
-				</uni-forms-item>
-			</uni-forms>
-			<button type="primary" @click="submit('valiForm')">提交</button>
-		</view>
+		<uni-section title="编辑采样点" type="line">
+					<view class="uni-edit-form">
+						<!-- 基础用法，不包含校验规则 -->
+						<uni-forms ref="valiForm" :modelValue="valiFormData">
+							<uni-forms-item label="检测窗口" required>
+								<uni-easyinput type="number" v-model="valiFormData.window" placeholder="请输入检测窗口" />
+							</uni-forms-item>
+						</uni-forms>
+					</view>
+				</uni-section>
+				<button type="primary" @click="submit('valiForm')">提交</button>
 	</view>
 </template>
 
@@ -20,16 +22,7 @@
 				value: '',
 				// 校验表单数据
 				valiFormData: {
-					name: '',
-				},
-				// 校验规则
-				rules: {
-					name: {
-						rules: [{
-							required: true,
-							errorMessage: '检测点名称不能为空'
-						}]
-					}
+					window: '',
 				}
 			}
 		},
@@ -42,14 +35,14 @@
 			if(e.id){
 				this.id = e.id;
 			}
-			if (e.name) {
-				this.$set(this.valiFormData, 'name', e.name)
+			if (e.window) {
+				this.$set(this.valiFormData, 'window', e.window)
 			}
 		},
 		methods: {
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
-					this.$store.commit("update_detectionData_name", this.valiFormData.name);
+					this.$store.commit("update_detectionData_window", this.valiFormData.window);
 					uni.navigateTo({
 						url: '/pages/detection/detection-edit/detection-edit?id='+ this.id,
 						animationType: 'slide-in-right',

@@ -1,12 +1,6 @@
 {
 	"pages": [
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
-		{
 		    "path" : "pages/login/login",
 		    "style" :                                                                                    
 		    {
@@ -27,7 +21,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
         }
         ,{
@@ -47,8 +41,8 @@
                 "enablePullDownRefresh": false
             }
             
-        }
-        ,{
+        },
+		{
             "path" : "pages/detection/detection-edit/detection-edit-address",
             "style" :                                                                                    
             {
@@ -56,7 +50,53 @@
                 "enablePullDownRefresh": false
             }
             
-        },{
+        },
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-rate",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-time",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-wait",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/detection/detection-edit/detection-edit-window",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
+		{
+		    "path" : "pages/administrators/list",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true
+		    }
+		    
+		},
+		{
             "path" : "pages/admin/admin",
             "style" :                                                                                    
             {
@@ -80,8 +120,7 @@
             {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
-            }
-            
+            } 
         }
         ,{
             "path" : "pages/role/role",
@@ -100,7 +139,13 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
