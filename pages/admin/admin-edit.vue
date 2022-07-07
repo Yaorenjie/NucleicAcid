@@ -11,12 +11,14 @@
 					<uni-easyinput type="textarea"  v-model="valiFormData.comment" />
 				</uni-forms-item>
 				<uni-forms-item label="合同开始日期" name="contractStartAt">
-					<uni-datetime-picker type="datetime" return-type="timestamp"
-						v-model="valiFormData.contractStartAt" />
+					<picker mode="date" :value="valiFormData.contractStartAt" @change="bindContractStartAt">
+						<view class="uni-input">{{valiFormData.contractStartAt}}</view>
+					</picker>
 				</uni-forms-item>
 				<uni-forms-item label="合同结束日期" name="contractEndAt">
-					<uni-datetime-picker type="datetime" return-type="timestamp"
-						v-model="valiFormData.contractEndAt" />
+					<picker mode="date" :value="valiFormData.contractEndAt" @change="bindContractEndAt">
+						<view class="uni-input">{{valiFormData.contractEndAt}}</view>
+					</picker>
 				</uni-forms-item>
 			</uni-forms>
 			<button type="primary" @click="submit('valiForm')">提交</button>
@@ -52,18 +54,37 @@
 			if(e.id){
 				console.log(e.id)
 				this.$set(this.valiFormData,'id', e.id)
+				this.getAdminInfo(e.id)
 			}
 		},
 		methods: {
-			submit(ref) {
+			getAdminInfo(id){
+				this.$http.httpGet('/admin/'+id+'/').then((res) => {
+					console.log(res)
+					this.valiFormData = res
+					console.log(this.valiFormData)
+				})
+				.catch((error) => {
+				    console.log(error);
+				});
+			},
+			bindContractStartAt(e){
+				this.$set(this.valiFormData,'contractStartAt',e.detail.value)
+			},
+			bindContractEndAt(e){
+				this.$set(this.valiFormData,'contractEndAt',e.detail.value)
+			},
+			submit(ref){
 				this.$refs[ref].validate().then(res => {
 					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
-					})
+					this.valiFormData.id===0?this.addAdmin():this.editAdmin()
 				}).catch(err => {
 					console.log('err', err);
 				})
+			},
+			addAdmin(){
+			},
+			editAdmin(){
 			}
 		}
 	}
@@ -72,5 +93,11 @@
 <style lang="scss">
 	.uni-edit-form{
 		padding: 0 20rpx;
+	}
+	uni-picker{
+		.uni-input{
+			border: 1px solid rgb(229, 229, 229);
+			border-radius: 4px;
+		}
 	}
 </style>

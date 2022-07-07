@@ -11,8 +11,8 @@
 					<uni-icons type="auth-filled" size="24" color="#999"></uni-icons>
 					<text class="card-actions-item-text">无痕登录</text>
 				</view>
-				<button class="mini-btn" type="default" size="mini">基本设置</button>
-				<button class="mini-btn" type="default" size="mini">管理员配置</button>
+				<button class="mini-btn" type="default" size="mini" @click="adminEdit(item.id)">基本设置</button>
+				<button class="mini-btn" type="default" size="mini" @click="adminUser(item.id)">管理员配置</button>
 			</view>
 		</uni-card>
 	</view>
@@ -25,7 +25,6 @@
 				page: 1,
 				size: 10,
 				keyword: "",
-				adminListUrl: "http://hsc.zhaomaomao.net/admin/",
 				adminList: [
 					{
 						company: "公司名称",
@@ -39,48 +38,35 @@
 			}
 		},
 		created() {
-			// this.getAdminList()
+			this.getAdminList()
 		},
 		methods: {
-			async getAdminList(){
-				let res, err
-				// #ifndef VUE3
-				[err, res] = await uni.request({
-					url: this.adminListUrl,
-					dataType: 'text',
-					header:{
-						Authentication: "hdlpwT6abxrBCLb9VYx4PKa7Op2b53JikSbEZP2vGzd7YIFY2XQL3msinffEFv8p"
-					},
-					data: {
-						page: this.page,
-						size: this.size,
-						keyword: this.keyword,
-						noncestr: Date.now()
-					}
+			getAdminList(){
+				this.$http.httpGet('/admin',{
+					page: this.page,
+					size: this.size,
+					keyword: this.keyword
+				}).then((res) => {
+					console.log(res.data)
+					if(res.data)this.adminList=res.data
+				})
+				.catch((error) => {
+				    console.log(error);
 				});
-				// #endif
-				// #ifdef VUE3
-				try {
-				res = await uni.request({
-					url: requestUrl,
-					dataType: 'text',
-					data: {
-						noncestr: Date.now()
-					}
-				});
-				} catch(e){
-					err=e
-				}
-				// #endif
-				if (err) {
-					console.log('request fail', err);
-					uni.showModal({
-						content: err.errMsg,
-						showCancel: false
-					});
-				} else {
-					console.log('request success', res)
-				}
+			},
+			adminEdit(id){
+				uni.navigateTo({
+					url: 'admin-edit?id='+id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			adminUser(id){
+				uni.navigateTo({
+					url: 'admin-user?id='+id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
 			}
 		}
 	}
@@ -92,8 +78,8 @@
 		padding: 20rpx;
 	}
 	
-	.detection-list{
-		margin-top: 10px !important;
+	.uni-card{
+		margin-bottom: 20rpx !important;
 	}
 	
 	.custom-cover {
