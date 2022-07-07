@@ -6,6 +6,7 @@
 						<uni-forms ref="valiForm" :modelValue="valiFormData">
 							<uni-forms-item label="检测时长" required>
 								<uni-easyinput type="number" v-model="valiFormData.rate" placeholder="请输入检测时长" />
+								<!-- <uni-number-box v-model="vModelValue" @blur="blur" @focus="focus" @change="changeValue" /> -->
 							</uni-forms-item>
 						</uni-forms>
 					</view>

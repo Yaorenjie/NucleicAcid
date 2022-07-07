@@ -2,7 +2,8 @@
 	<view>
 		<uni-section title="编辑采样点" type="line">
 			<view class="uni-edit-form" v-for="(item, index) in times" :key="index">
-				<timeRegion :times="item" :index="index" @bindTimeChange="bindTimeChange" @bindTimeDelete="bindTimeDelete" />
+				<timeRegion :times="item" :index="index" @bindTimeChange="bindTimeChange"
+					@bindTimeDelete="bindTimeDelete" />
 			</view>
 		</uni-section>
 		<button type="primary" @click="addOne">添加工作时间段</button>
@@ -14,28 +15,26 @@
 	import timeRegion from '@/components/time/region.vue'
 	export default {
 		components: {
-		     timeRegion
+			timeRegion
 		},
 		data() {
 			return {
 				id: '',
 				value: '',
 				// 校验表单数据
-				times: [
-					{
-						startAt: '',
-						endAt: ''
-					}
-				]
+				times: [{
+					startAt: '',
+					endAt: ''
+				}]
 			}
 		},
 		computed: {
-			data () {
+			data() {
 				return this.$store.state.detectionData
 			}
 		},
-		onLoad(e){
-			if(e.id){
+		onLoad(e) {
+			if (e.id) {
 				this.id = e.id;
 			}
 			if (e.window) {
@@ -46,14 +45,14 @@
 			this.times = this.data.time
 		},
 		methods: {
-			bindTimeChange (item) {
+			bindTimeChange(item) {
 				this.$set(this.times, item.index, item.data)
 				console.log(this.times)
 			},
-			bindTimeDelete (index) {
+			bindTimeDelete(index) {
 				this.times.splice(index, 1)
 			},
-			addOne () {
+			addOne() {
 				this.times.push({
 					startAt: '',
 					endAt: ''
@@ -62,7 +61,7 @@
 			submit(ref) {
 				this.$store.commit("update_detectionData_time", this.times);
 				uni.navigateTo({
-					url: '/pages/detection/detection-edit/detection-edit?id='+ this.id,
+					url: '/pages/detection/detection-edit/detection-edit?id=' + this.id,
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
@@ -72,7 +71,7 @@
 </script>
 
 <style lang="scss">
-	.uni-edit-form{
+	.uni-edit-form {
 		padding: 0 20rpx;
 	}
 </style>
