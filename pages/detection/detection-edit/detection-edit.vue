@@ -5,7 +5,9 @@
 			<uni-list-item showArrow title="详细地址" :note="data.address" clickable @click="actionsAdress"/>
 			<uni-list-item showArrow title="工作时间" clickable @click="actionsTime">
 				<template v-slot:footer>
-					<text v-if="data.time.length > 0">{{data.time[0].startAt}}-{{data.time[0].endAt}} {{data.time[1].startAt}}-{{data.time[1].endAt}}</text>
+					<view class="time-list">
+						<view class="time-one" v-for="(item, index) in data.time" :key="index">{{item.startAt}} - {{item.endAt}}</view>
+					</view>
 				</template>
 			</uni-list-item>
 			<uni-list-item showArrow title="检测窗口" :rightText="data.window ? `${data.window}个` : ''" clickable @click="actionsWindow" />
@@ -15,9 +17,11 @@
 				<view class="uni-list-cell-db">是否启用</view>
 				<switch :checked="data.state === 1 ? true : false" @change="actionsEnable" />
 			</view>
-			<button type="primary" @click="cancel()">取消</button>
-			<button type="primary" @click="submit()">提交</button>
 		</uni-list>
+		<view class="btn-list">
+			<button size="mini" type="primary" @click="cancel()">取消</button>
+			<button size="mini" type="primary" @click="submit()">提交</button>
+		</view>
 	</view>
 </template>
 
@@ -36,8 +40,12 @@
 		},
 		onLoad(e){
 			if(e.id){
-				this.id = e.id
-				this.getData()
+				if (e.id === '0') {
+					this.clear()
+				} else {
+					this.id = e.id
+					this.getData()
+				}
 			}
 		},
 		methods: {
@@ -91,6 +99,14 @@
 				})
 			},
 			cancel () {
+				this.clear()
+				uni.navigateTo({
+					url: '/pages/detection/detection',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			clear () {
 				this.$store.commit("update_detectionData", {
 					name: '',
 					address: '',
@@ -104,7 +120,8 @@
 				})
 			},
 			async submit () {
-				const data = await this.$http.httpPost('/admin/point/', {
+				if (this.validateForm()) return
+ 				const data = await this.$http.httpPost('/admin/point/', {
 					...this.data,
 					...{
 						province: 0,
@@ -113,16 +130,58 @@
 					}
 				})
 				this.cancel()
-				uni.navigateTo({
-					url: '/pages/detection/detection',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
+			},
+			validateForm () {
+				if (this.data.name.trim() === '') {
+					uni.showToast({
+						title: '检测点名称不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return true
+				}
+				if (this.data.address.trim() === '') {
+					uni.showToast({
+						title: '详细地址不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return true
+				}
+				if (this.data.time.length === 0) {
+					uni.showToast({
+						title: '工作时间不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return true
+				}
+				if (!this.data.rate) {
+					uni.showToast({
+						title: '检测窗口不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return true
+				}
+				return false
 			}
 		}
 	}
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.btn-list {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 30px;
+		display: flex;
+		justify-content: center;
+		>button{
+			&:nth-child(1){
+				margin-right: 20px;
+			}
+		}
+	}
 </style>

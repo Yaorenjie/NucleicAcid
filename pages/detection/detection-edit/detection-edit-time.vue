@@ -1,13 +1,17 @@
 <template>
 	<view>
-		<uni-section title="编辑采样点" type="line">
+		<uni-section class="uni-section-detection" title="编辑工作时间" type="line">
 			<view class="uni-edit-form" v-for="(item, index) in times" :key="index">
 				<timeRegion :times="item" :index="index" @bindTimeChange="bindTimeChange"
 					@bindTimeDelete="bindTimeDelete" />
 			</view>
 		</uni-section>
-		<button type="primary" @click="addOne">添加工作时间段</button>
-		<button type="primary" @click="submit('valiForm')">提交</button>
+		
+		<view class="button-group">
+			<button type="primary" size="mini" @click="addOne">添加工作时间段</button>
+			<button type="primary" size="mini" @click="cancel">取消</button>
+			<button type="primary" size="mini" @click="submit('valiForm')">提交</button>
+		</view>
 	</view>
 </template>
 
@@ -22,10 +26,7 @@
 				id: '',
 				value: '',
 				// 校验表单数据
-				times: [{
-					startAt: '',
-					endAt: ''
-				}]
+				times: []
 			}
 		},
 		computed: {
@@ -37,12 +38,17 @@
 			if (e.id) {
 				this.id = e.id;
 			}
-			if (e.window) {
-				this.$set(this.valiFormData, 'window', e.window)
-			}
 		},
 		onShow() {
-			this.times = this.data.time
+			for (let i in this.data.time) {
+				this.times.push(this.data.time[i])
+			}
+			if (this.times.length === 0) {
+				this.times = [{
+					startAt: '',
+					endAt: ''
+				}]
+			}
 		},
 		methods: {
 			bindTimeChange(item) {
@@ -53,15 +59,31 @@
 				this.times.splice(index, 1)
 			},
 			addOne() {
+				if (this.addValidate()) return
 				this.times.push({
 					startAt: '',
 					endAt: ''
 				})
 			},
+			addValidate() {
+				if (this.times.length === 0) return false
+				if (this.times[this.times.length - 1].startAt === '' || this.times[this.times.length - 1].endAt === '') {
+					uni.showToast({
+						title: '起始时间和结束时间不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return true
+				}
+				return false
+			},
 			submit(ref) {
 				this.$store.commit("update_detectionData_time", this.times);
+				this.cancel()
+			},
+			cancel() {
 				uni.navigateTo({
-					url: '/pages/detection/detection-edit/detection-edit?id=' + this.id,
+					url: '/pages/detection/detection-edit/detection-edit',
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})

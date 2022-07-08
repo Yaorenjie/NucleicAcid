@@ -10,7 +10,8 @@
 					起始时间
 				</view>
 				<view class="uni-list-cell-db">
-					<picker mode="time" :value="times.startAt" start="09:01" end="21:01"  @change="bindTimeChange($event, 'start')">
+					<picker mode="time" :value="times.startAt"
+						@change="bindTimeChange($event, 'start')">
 						<view class="uni-input">{{times.startAt}}</view>
 					</picker>
 				</view>
@@ -22,7 +23,8 @@
 					结束时间
 				</view>
 				<view class="uni-list-cell-db">
-					<picker mode="time" :value="times.endAt" start="09:01" end="21:01"  @change="bindTimeChange($event, 'end')">
+					<picker mode="time" :value="times.endAt"
+						@change="bindTimeChange($event, 'end')">
 						<view class="uni-input">{{times.endAt}}</view>
 					</picker>
 				</view>
@@ -49,10 +51,11 @@
 			}
 		},
 		methods: {
-			deleteCk () {
+			deleteCk() {
 				this.$emit('bindTimeDelete', this.index)
 			},
-			bindTimeChange (e, key) {
+			bindTimeChange(e, key) {
+				console.log(e.detail.value)
 				this.times[key] = e.detail.value
 				if (key === 'start') {
 					this.$emit('bindTimeChange', {
@@ -63,13 +66,38 @@
 						index: this.index
 					})
 				} else {
-					this.$emit('bindTimeChange', {
-						data: {
-							startAt: this.times.startAt,
-							endAt: e.detail.value + ':00'
-						},
-						index: this.index
-					})
+					if (!this.compareTime(this.times.startAt, e.detail.value + ':00')) {
+						uni.showToast({
+							title: '结束时间不能比起始时间大',
+							icon: 'none',
+							duration: 2000
+						})
+						this.times[key] = ''
+						return
+					}
+						this.$emit('bindTimeChange', {
+							data: {
+								startAt: this.times.startAt,
+								endAt: e.detail.value + ':00'
+							},
+							index: this.index
+						})
+				}
+			},
+			compareTime(time1, time2) {
+			 if (this.time_to_sec(time2) - this.time_to_sec(time1) > 0) {
+					return true;
+				}
+				return false;
+			},
+			time_to_sec(time) {
+				if (time !== null) {
+					var s = "";
+					var hour = time.split(":")[0];
+					var min = time.split(":")[1];
+					var sec = time.split(":")[2];
+					s = Number(hour * 3600) + Number(min * 60) + Number(sec);
+					return s;
 				}
 			}
 		}
@@ -77,7 +105,11 @@
 </script>
 
 <style scoped>
-	.uni-title{
+	.time-one {
+		padding-bottom: 20px;
+	}
+
+	.uni-title {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;

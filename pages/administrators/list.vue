@@ -1,8 +1,9 @@
 <template>
 	<view class="container">
 		<view class="uni-form-item uni-column">
-			<input class="uni-input" v-model="search.keyWord" @change="initList" placeholder="请输入姓名/手机号" />
+			<uni-easyinput suffixIcon="search" v-model="search.keyWord" placeholder="请输入姓名/手机号" @confirm="initList" @change="initList" @iconClick="initList"></uni-easyinput>
 		</view>
+		<button size="mini" class="mini-btn" type="default"  @click="addCk()">新增</button>
 		<uni-card class="card-one" v-for="(item, index) in adminList" :key="index" :title="item.role" :isFull="true">
 			<view class="uni-flex uni-row uni-align-center">
 				<uni-icons type="person" size="24"></uni-icons>
@@ -48,7 +49,6 @@
 		},
 		onLoad() {
 			uni.startPullDownRefresh()
-			this.getList()
 		},
 		onPullDownRefresh () {
 		    this.detectionList = []
@@ -79,6 +79,13 @@
 			editCk (item) {
 				uni.navigateTo({
 					url: '/pages/administrators/edit?id=' + item.id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			addCk () {
+				uni.navigateTo({
+					url: '/pages/administrators/edit',
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})

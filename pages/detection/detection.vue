@@ -1,13 +1,12 @@
 <template>
 	<view class="container">
-		<view class="input" type="text" placeholder="请选择地区">
-		        <picker class="pickerList" mode="multiSelector" :range="newProvinceDataList" range-key="text" :value="multiIndex"
-		            @change="pickerChange" @columnchange="pickerColumnchange">
-		            <view class="">{{select}}</view>
-		        </picker>
-		    </view>
-		<button type="default" @click="addCk">添加采样点</button>
-		<uni-card v-for="item in detectionList" @click="editCk(item.id)" class="detection-list" :title="item.name" :isFull="true" :sub-title="item.fullAddress" :extra="item.distance">
+		<selectCity @change="cityChange" />
+		<view class="flex-end">
+			<button size="mini" type="default" @click="addCk">添加采样点</button>
+		</view>
+		<uni-card v-for="(item, index) in detectionList" :key="index" @click="editCk(item.id)" class="detection-list"
+			:title="item.name" :isFull="true" :sub-title="item.fullAddress"
+			:extra="item.distance === -1 ? '' : item.distance + '公里'">
 			<view class="uni-flex uni-row uni-justify-center uni-align-center">
 				<view class="text">预计等待时间</view>
 				<text class="uni-h1 color-important">{{item.waitTime}}</text>
@@ -20,9 +19,9 @@
 					<view v-for="(item1, index1) in item.time">
 						{{item1.startAt}} - {{item1.endAt}}
 					</view>
-				</view>	
+				</view>
 			</view>
-<!-- 			<view slot="actions" class="card-actions">
+			<!-- 			<view slot="actions" class="card-actions">
 				<view class="card-actions-item" @click="actionsEdit(1)">
 					<uni-icons type="compose" size="18" color="#999"></uni-icons>
 					<text class="card-actions-item-text">编辑</text>
@@ -34,48 +33,15 @@
 </template>
 
 <script>
+	import selectCity from '@/components/select/city.vue'
 	export default {
+		components: {
+			selectCity
+		},
 		data() {
 			return {
 				title: "核酸检测点",
-				detectionList: [
-					{
-						name: "圣熙8号（索真）社会化点位",
-						address: "海淀区学清路8号物美圣熙8号购物中心正门西侧",
-						time: "8:00-19:30",
-						people: "20",
-						point: "1",
-						distance: "1.4公里",
-						wait: '20'
-					},
-					{
-						name: "凯时广场（索真）社会化点位",
-						address: "海淀区清华东路甲1号凯时广场",
-						time: "9:00-11:30 13:00-17:30",
-						people: "30",
-						point: "1",
-						distance: "1.6公里",
-						wait: '30'
-					},
-					{
-						name: "学清嘉创大厦（谱尼）社会化点位",
-						address: "海淀区学清嘉创大厦西北角",
-						time: "9:00-11:30 13:00-17:30",
-						people: "10",
-						point: "1",
-						distance: "1.8公里",
-						wait: '10'
-					},
-					{
-						name: "中国石油化工科学研究院西门（谱尼）社会化点位",
-						address: "海淀区学院路18号中国石油化工科学研究院西门",
-						time: "9:00-11:30 13:00-17:30",
-						people: "30",
-						point: "1",
-						distance: "3.6公里",
-						wait: '30'
-					}
-				],
+				detectionList: [],
 				search: {
 					page: 1,
 					size: 10,
@@ -86,44 +52,45 @@
 					longitude: ''
 				},
 				status: 'more',
-				total: 0,
-				oldpProvinceDataList: [],
-				newProvinceDataList: [[],[],[]],
-				multiIndex: [0, 0, 0],
-				select: '选择地区'
+				total: 0
 			}
 		},
 		onLoad() {
 			uni.startPullDownRefresh()
-			this.getList()
-			this.init()
 		},
-		onPullDownRefresh () {
-		    this.detectionList = []
+		onShow() {
+			this.getLocation()
+		},
+		onPullDownRefresh() {
+			this.detectionList = []
 			this.search.page = 1
-		    this.getList()
-		    setTimeout(() => {
-		      uni.stopPullDownRefresh ();
-		    }, 1000);
+			this.getList()
+			setTimeout(() => {
+				uni.stopPullDownRefresh();
+			}, 1000);
 		},
-		onReachBottom(){
-			if(this.detectionList.length < this.total){
-				this.search.page ++;
-			    this.getList()
+		onReachBottom() {
+			if (this.detectionList.length < this.total) {
+				this.search.page++;
+				this.getList()
 			}
-		},			
+		},
 		methods: {
-			async init() {
-				await this.getCity(0, 0)
-				await this.getCity(1, this.newProvinceDataList[0][0].value)
-				await this.getCity(2, this.newProvinceDataList[1][0].value)
-			},
-			async getCity(index, pid) {
-				const data = await this.$http.httpGet('/admin/location_opt/', {
-					pid: pid
-				})
-				this.$set(this.newProvinceDataList, index, data)
-				console.log(data)
+			getLocation() {
+				console.log(121212)
+				uni.getLocation({
+					type: 'wgs84',
+					geocode: true, //设置该参数为true可直接获取经纬度及城市信息
+					success: function(res) {
+						console.log(res)
+					},
+					fail: function() {
+						uni.showToast({
+							title: '获取地址失败，将导致部分功能不可用',
+							icon: 'none'
+						});
+					}
+				});
 			},
 			async getList() {
 				this.status = 'loading';
@@ -131,54 +98,41 @@
 				console.log(data)
 				this.total = data.total
 				this.detectionList = data.data
-				if(this.detectionList.length >= this.total) this.status = 'noMore'
+				if (this.detectionList.length >= this.total) this.status = 'noMore'
 			},
-			actionsEdit(id){
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id='+id,
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-		    pickerChange (e) {
-			    var _this = this
-			    _this.multiIndex = e.detail.value
-			    _this.select =
-			        _this.newProvinceDataList[0][_this.multiIndex[0]].value + "---" +
-			        _this.newProvinceDataList[1][_this.multiIndex[1]].value + "---" +
-			        _this.newProvinceDataList[2][_this.multiIndex[2]].value
-			},
-			async pickerColumnchange(e) {
-				if (e.detail.column === 0) {
-					this.multiIndex[0] = e.detail.value
-					this.multiIndex[1] = 0
-					this.multiIndex[2] = 0
-					await this.getCity(1, this.newProvinceDataList[0][this.multiIndex[0]].value)
-					await this.getCity(2, this.newProvinceDataList[1][0].value)
-				}
-				if (e.detail.column === 1) {
-					this.multiIndex[1] = e.detail.value
-					this.multiIndex[2] = 0
-					await this.getCity(2, this.newProvinceDataList[1][e.detail.value].value)
-				}
-				if (e.detail.column === 2) {
-					this.multiIndex[2] = e.detail.value
-				}
-				console.log(this.multiIndex)
-			},
-			addCk () {
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-			editCk (id) {
+			actionsEdit(id) {
 				uni.navigateTo({
 					url: 'detection-edit/detection-edit?id=' + id,
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
+			},
+			addCk() {
+				uni.navigateTo({
+					url: 'detection-edit/detection-edit?id=0',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			editCk(id) {
+				uni.navigateTo({
+					url: 'detection-edit/detection-edit?id=' + id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			cityChange(item) {
+				if (item.length > 0) {
+					this.$set(this.search, 'province', item[0])
+					this.$set(this.search, 'city', item[1])
+					this.$set(this.search, 'area', item[2])
+				} else {
+					this.$set(this.search, 'province', '')
+					this.$set(this.search, 'city', '')
+					this.$set(this.search, 'area', '')
+				}
+				this.$set(this.search, 'page', 1)
+				this.getList()
 			}
 		}
 	}
@@ -189,11 +143,11 @@
 		overflow: hidden;
 		padding: 20rpx;
 	}
-	
-	.detection-list{
+
+	.detection-list {
 		margin-top: 10px !important;
 	}
-	
+
 	.custom-cover {
 		flex: 1;
 		flex-direction: row;
