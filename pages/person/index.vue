@@ -1,16 +1,16 @@
 <template>
 	<view class="container">
 		<uni-section title="管理中心" type="line">
-			<ul-list>
+			<uni-list>
 				<uni-list-item v-for="(item,index) in list" :key="index" showArrow :title="item.name" clickable @click="urlCk(item.path)"/>
-			</ul-list>
+			</uni-list>
 		</uni-section>
 		<uni-section title="基本信息" type="line">
-			<ul-list margin-top="0">
+			<uni-list>
 				<uni-list-item title="姓名" :rightText="user.name"/>
 				<uni-list-item title="手机号" :rightText="user.account"/>
 				<uni-list-item title="退出" showArrow clickable @click="logOut"/>
-			</ul-list>
+			</uni-list>
 		</uni-section>
 	</view>
 </template>
@@ -22,9 +22,15 @@
 				list: [
 					{
 						name: "用户管理",
+						path: "/pages/admin/admin"
 					},
 					{
 						name: "角色管理",
+						path: "/pages/role/role"
+					},
+					{
+						name: "权限管理",
+						path: "/pages/permission/permission"
 					},
 					{
 						name: "管理员管理",

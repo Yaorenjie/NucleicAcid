@@ -1,20 +1,19 @@
 <template>
 	<view>
-		<uni-section title="编辑检测点名称" type="line" class="section-box">
-			<uni-list class="list-box">
-				<uni-list-item title="详细地址" :note="data.address" clickable @click="openLocation">
-					<template v-slot:footer>
-						<view class="card-actions-item">
-							<uni-icons type="location-filled" size="18" color="#999"></uni-icons>
-						</view>
-					</template>
-				</uni-list-item>
-			</uni-list>
+		<uni-section title="编辑检测点名称" type="line">
+			<view class="uni-edit-form">
+				<uni-forms ref="valiForm" :modelValue="valiFormData">
+					<uni-list-item title="详细地址" :note="valiFormData.address" clickable @click="openLocation">
+						<template v-slot:footer>
+							<view class="card-actions-item">
+								<uni-icons type="location-filled" size="18" color="#999"></uni-icons>
+							</view>
+						</template>
+					</uni-list-item>
+				</uni-forms>
+				<button type="primary" @click="submit()">提交</button>
+			</view>
 		</uni-section>
-		<view class="button-group">
-			<button type="primary" size="mini" @click="cancel()">取消</button>
-			<button type="primary" size="mini" @click="submit()">提交</button>
-		</view>
 	</view>
 </template>
 
@@ -34,25 +33,11 @@
 				type: '',
 				// 校验表单数据
 				valiFormData: {
-					id: '',
-					address: '',
-					lat: '',
-					long: '',
-				},
-				// 校验规则
-				rules: {
-					rules: [{
-							format: 'array'
-						},
-						{
-							validateFunction: function(rule, value, data, callback) {
-								if (value.length < 2) {
-									callback('请至少勾选两个兴趣爱好')
-								}
-								return true
-							}
-						}
-					]
+					id: 0,
+					name: '雅居乐花园',
+					address: '四川省成都市天府新区麓山大道二段19号成都雅居乐花园',
+					lat: 39.9085,
+					long: 116.39747,
 				}
 			}
 		},
@@ -88,6 +73,7 @@
 						this.$set(this.valiFormData, 'address', res.address)
 						this.$set(this.valiFormData, 'lat', res.latitude)
 						this.$set(this.valiFormData, 'long', res.longitude)
+						console.log(this.valiFormData)
 					}
 				})
 			},
@@ -218,9 +204,6 @@
 </script>
 
 <style lang="scss">
-	.section-box{
-		padding: 0 0 20px 0;
-	}
 	.list-box{
 		margin: 20px;
 		width: calc(100% - 40px);

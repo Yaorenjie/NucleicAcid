@@ -1,34 +1,30 @@
 <template>
 	<view class="container">
-		<selectCity @change="cityChange" />
-		<view class="flex-end">
-			<button size="mini" type="default" @click="addCk">添加采样点</button>
-		</view>
-		<uni-card v-for="(item, index) in detectionList" :key="index" @click="editCk(item.id)" class="detection-list"
-			:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-			:extra="item.distance === -1 ? '' : item.distance + '公里'">
-			<view class="uni-flex uni-row uni-justify-center uni-align-center">
-				<view class="text">预计等待时间</view>
-				<text class="uni-h1 color-important">{{item.waitTime}}</text>
-				<view class="text">分钟</view>
-			</view>
-			<view class="uni-body">
-				<view>总排队人数：{{item.wait}}人</view>
-				<view>检测窗口：{{item.window}}个</view>
-				<view>采样时间：
-					<view v-for="(item1, index1) in item.time">
-						{{item1.startAt}} - {{item1.endAt}}
+		<uni-nav-bar dark left-icon="left" right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft" @clickRight="clickRight">
+			<selectCity @change="cityChange" />
+		</uni-nav-bar>
+		<view class="detection-body">
+			<uni-card v-for="(item, index) in detectionList" :key="index" @click="actionsEdit(item.id)" class="detection-list"
+				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
+				:extra="item.distance === -1 ? '' : item.distance + '公里'">
+				<view class="uni-flex uni-row uni-justify-center uni-align-center">
+					<view class="text">预计等待时间</view>
+					<text class="uni-h1 color-important">{{item.waitTime}}</text>
+					<view class="text">分钟</view>
+				</view>
+				<view class="uni-body">
+					<view>总排队人数：{{item.wait}}人</view>
+					<view>检测窗口：{{item.window}}个</view>
+					<view>采样时间：
+						<view v-for="(item1, index1) in item.time">
+							{{item1.startAt}} - {{item1.endAt}}
+						</view>
 					</view>
 				</view>
-			</view>
-			<!-- 			<view slot="actions" class="card-actions">
-				<view class="card-actions-item" @click="actionsEdit(1)">
-					<uni-icons type="compose" size="18" color="#999"></uni-icons>
-					<text class="card-actions-item-text">编辑</text>
-				</view>
-			</view> -->
-		</uni-card>
-		<uni-load-more :status="status"></uni-load-more>
+			</uni-card>
+		</view>
+		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
+		<uni-fab ref="fab":content="content" horizontal="right" vertical="bottom" :pattern="pattern" @trigger="trigger" />
 	</view>
 </template>
 
@@ -42,6 +38,10 @@
 			return {
 				title: "核酸检测点",
 				detectionList: [],
+				pattern: {
+					selectedColor: '#0260a2',
+					buttonColor: '#0260a2',
+				},
 				search: {
 					page: 1,
 					size: 10,
@@ -51,33 +51,71 @@
 					latitude: '',
 					longitude: ''
 				},
-				status: 'more',
-				total: 0
+				content: [{
+						iconPath: '/static/add.png',
+						selectedIconPath: '/static/add-active.png',
+						text: '添加',
+						active: false
+					},
+					{
+						iconPath: '/static/import.png',
+						selectedIconPath: '/static/import-active.png',
+						text: '导入',
+						active: false
+					}
+				],
+				totalPage: 0,
+				loadMoreText: "加载中...",
+				showLoadMore: false
 			}
-		},
-		onLoad() {
-			// uni.startPullDownRefresh()
 		},
 		onShow() {
 			this.getLocation()
-			this.$set(this.search, 'page', 1)
-			this.getList()
+			this.initData()
+		},
+		onUnload() {
+			this.totalPage = 0
+			this.detectionList = []
+			this.loadMoreText = "加载更多"
+			this.showLoadMore = false
 		},
 		onPullDownRefresh() {
-			this.detectionList = []
-			this.search.page = 1
-			this.getList()
-			setTimeout(() => {
-				uni.stopPullDownRefresh();
-			}, 1000);
+			this.initData()
 		},
 		onReachBottom() {
-			if (this.detectionList.length < this.total) {
-				this.search.page++;
+			if (this.detectionList.length < this.totalPage) {
+				this.showLoadMore = true
+				this.$set(this.search,'page',this.search.page++)
 				this.getList()
+			} else {
+				this.loadMoreText = "没有更多数据了"
 			}
 		},
 		methods: {
+			clickLeft(){
+				uni.navigateBack()
+			},
+			clickRight(){
+				uni.navigateTo({
+					url: '/pages/person/index',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			trigger(e) {
+				console.log(e)
+				this.content[e.index].active = !e.item.active
+				switch(e.index){
+					case 0:
+						this.addCk()
+						break
+					case 1:
+						console.log('导入')
+						break
+					default:
+						break
+				}
+			},
 			getLocation() {
 				uni.getLocation({
 					type: 'wgs84',
@@ -93,16 +131,16 @@
 					}
 				});
 			},
+			initData(){
+				this.detectionList = []
+				this.$set(this.search, 'page', 1)
+				this.getList()
+			},
 			async getList() {
-				this.status = 'loading';
-				const data = await this.$http.httpGet('/admin/point/', this.search)
-				console.log(data)
-				this.total = data.total
-				this.detectionList = [
-					...this.detectionList,
-					...data.data
-				]
-				if (this.detectionList.length >= this.total) this.status = 'noMore'
+				const res = await this.$http.httpGet('/admin/point/', this.search)
+				this.totalPage = res.total
+				if(res.data)this.detectionList.push.apply(this.detectionList,res.data)
+				uni.stopPullDownRefresh()
 			},
 			actionsEdit(id) {
 				uni.navigateTo({
@@ -113,14 +151,7 @@
 			},
 			addCk() {
 				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id=0',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-			editCk(id) {
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id=' + id,
+					url: 'detection-edit/detection-edit',
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
@@ -135,8 +166,7 @@
 					this.$set(this.search, 'city', '')
 					this.$set(this.search, 'area', '')
 				}
-				this.$set(this.search, 'page', 1)
-				this.getList()
+				thi.initData()
 			}
 		}
 	}
@@ -145,9 +175,11 @@
 <style lang="scss">
 	.container {
 		overflow: hidden;
-		padding: 20rpx;
+		// padding: 20rpx;
 	}
-
+	.detection-body{
+		padding: 0 20rpx;
+	}
 	.detection-list {
 		margin-top: 10px !important;
 	}

@@ -125,9 +125,6 @@
 </script>
 
 <style lang="scss">
-	.uni-edit-form{
-		padding: 0 20rpx;
-	}
 	uni-picker{
 		.uni-input{
 			border: 1px solid rgb(229, 229, 229);

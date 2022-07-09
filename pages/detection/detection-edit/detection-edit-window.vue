@@ -2,18 +2,14 @@
 	<view>
 		<uni-section title="编辑检测窗口" type="line">
 			<view class="uni-edit-form">
-				<!-- 基础用法，不包含校验规则 -->
 				<uni-forms ref="valiForm" :modelValue="valiFormData">
 					<uni-forms-item>
-						<uni-number-box v-model="valiFormData.window" />
+						<uni-number-box v-model="valiFormData.window" :step="1" />
 					</uni-forms-item>
 				</uni-forms>
+				<button type="primary" @click="submit('valiForm')">提交</button>
 			</view>
 		</uni-section>
-		<view class="button-group">
-			<button type="primary" size="mini" @click="cancel()">取消</button>
-			<button type="primary" size="mini" @click="submit('valiForm')">提交</button>
-		</view>
 	</view>
 </template>
 
@@ -21,11 +17,10 @@
 	export default {
 		data() {
 			return {
-				id: '',
-				value: '',
+				id: 0,
 				// 校验表单数据
 				valiFormData: {
-					window: '',
+					window: 1,
 				}
 			}
 		},
@@ -62,8 +57,8 @@
 	}
 </script>
 
-<style lang="scss">
-	.uni-edit-form {
-		padding: 0 20rpx;
+<style lang="scss" scoped>
+	.uni-numbox{
+		justify-content: center;
 	}
 </style>

@@ -59,7 +59,7 @@
 			this.getAdminList()
 		},
 		onReachBottom() {
-			if (this.adminList.length < this.total) {
+			if (this.adminList.length < this.totalPage) {
 				this.showLoadMore = true
 				this.page++;
 				this.getAdminList()
@@ -75,7 +75,7 @@
 					keyword: this.keyword
 				}).then((res) => {
 					if(res.data)this.adminList.push.apply(this.adminList,res.data)
-					this.total = res.total
+					this.totalPage = res.total
 					uni.stopPullDownRefresh()
 				})
 				.catch((error) => {

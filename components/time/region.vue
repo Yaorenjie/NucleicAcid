@@ -1,34 +1,19 @@
 <template>
 	<view class="time-one">
-		<view class="uni-title uni-common-pl">
-			<view>工作时间段</view>
-			<view @click="deleteCk">删除</view>
+		<view class="row">
+			<picker mode="time" :value="times.startAt"
+				@change="bindTimeChange($event, 'start')">
+				<view class="uni-input">{{times.startAt}}</view>
+			</picker>
+			<span>-</span>
+			<picker mode="time" :value="times.endAt"
+				@change="bindTimeChange($event, 'end')">
+				<view class="uni-input">{{times.endAt}}</view>
+			</picker>
 		</view>
-		<view class="uni-list">
-			<view class="uni-list-cell">
-				<view class="uni-list-cell-left">
-					起始时间
-				</view>
-				<view class="uni-list-cell-db">
-					<picker mode="time" :value="times.startAt"
-						@change="bindTimeChange($event, 'start')">
-						<view class="uni-input">{{times.startAt}}</view>
-					</picker>
-				</view>
-			</view>
-		</view>
-		<view class="uni-list">
-			<view class="uni-list-cell">
-				<view class="uni-list-cell-left">
-					结束时间
-				</view>
-				<view class="uni-list-cell-db">
-					<picker mode="time" :value="times.endAt"
-						@change="bindTimeChange($event, 'end')">
-						<view class="uni-input">{{times.endAt}}</view>
-					</picker>
-				</view>
-			</view>
+		<view class="card-actions-item" @click="deleteCk">
+			<uni-icons type="trash" size="18" color="#666"></uni-icons>
+			<text class="card-actions-item-text">删除</text>
 		</view>
 	</view>
 </template>
@@ -105,13 +90,27 @@
 </script>
 
 <style scoped>
-	.time-one {
-		padding-bottom: 20px;
-	}
-
-	.uni-title {
+	.row{
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		span{
+			padding: 0 20rpx;
+		}
+	}
+	.card-actions-item{
+		position: absolute;
+		top: 8px;
+		right: 20px;
+		display: flex;
+		align-items: center;
+		color: #666666;
+	}
+	uni-picker{
+		width: calc(50% - 40rpx);
+		border: 1px solid #dcdfe6;
+		border-radius: 4px;
+		margin: 20rpx 0;
+		text-align: center;
 	}
 </style>

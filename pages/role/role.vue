@@ -46,7 +46,7 @@
 			this.getRoleList()
 		},
 		onReachBottom() {
-			if (this.roleList.length < this.total) {
+			if (this.roleList.length < this.totalPage) {
 				this.showLoadMore = true
 				this.page++;
 				this.getRoleList()
@@ -61,7 +61,7 @@
 					size: this.size
 				}).then((res) => {
 					if(res.data)this.roleList.push.apply(this.roleList,res.data)
-					this.total = res.total
+					this.totalPage = res.total
 					uni.stopPullDownRefresh()
 				})
 				.catch((error) => {

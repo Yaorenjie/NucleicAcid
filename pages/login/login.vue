@@ -4,11 +4,17 @@
 			<view class="login-logo">
 				<image class="slot-image" src="/static/login-logo.png" mode="widthFix"></image>
 			</view>
-			<uni-forms-item name="phonenumber" maxlength="11">
+			<uni-forms-item name="phone" maxlength="11">
 				<uni-easyinput type="number" v-model="formData.phone" placeholder="请输入手机号" />
 			</uni-forms-item>
-			<uni-forms-item  name="password">
+			<uni-forms-item name="password">
 				<uni-easyinput type="password" v-model="formData.password" password="true" placeholder="请输入密码" />
+			</uni-forms-item>
+			<uni-forms-item name="remember">
+				<view class="remember-list">
+					<switch :checked="remember" @change="switchChange"/>
+					<label>记住密码</label>
+				</view>
 			</uni-forms-item>
 			<uni-button type="primary" @tap="login">登录</uni-button>
 		</uni-forms>
@@ -27,6 +33,7 @@
 					phone: '',
 					password: ''
 				},
+				remember: true,
 				rules: {
 					password: {
 						rules: [
@@ -70,12 +77,32 @@
 				}
 			}
 		},
-		created() {
+		mounted(){
+			this.getAccount()
 		},
 		methods: {
+			switchChange(e){
+				this.remember=e.detail.value
+			},
+			getAccount(){
+				if(localStorage.getItem('account'))this.$set(this.formData,'phone',localStorage.getItem('account'))
+				if(localStorage.getItem('password'))this.$set(this.formData,'password',localStorage.getItem('password'))
+			},
+			setRemember(){
+				this.remember?this.storeAccount():this.clearAccount()
+			},
+			storeAccount(){
+				localStorage.setItem('account',this.formData.phone)
+				localStorage.setItem('password',this.formData.password)
+			},
+			clearAccount(){
+				if(localStorage.getItem('account'))localStorage.removeItem('account')
+				if(localStorage.getItem('password'))localStorage.removeItem('password')
+			},
 			login() {
 				this.$refs.form.validate().then(valid=>{
 					if (valid) {
+						this.setRemember()
 						this.loginAjax()
 				    }
 				}).catch(err =>{
@@ -151,6 +178,15 @@
 			.uni-forms-item__label{
 				height: 0;
 			}
+		}
+		.remember-list{
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+		}
+		uni-switch{
+			transform: scale(0.8);
 		}
 	}
 </style>
