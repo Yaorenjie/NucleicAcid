@@ -7,14 +7,16 @@
 				<text class="text uni-ml5">{{item.account}}</text>
 			</view>
 			<view slot="actions" class="card-actions">
-				<view class="card-actions-item" @click="actionsEdit(1)">
+				<view class="card-actions-item" @click="accountLogin(item.id,item.account,item.password)">
 					<uni-icons type="auth-filled" size="24" color="#999"></uni-icons>
 					<text class="card-actions-item-text">无痕登录</text>
 				</view>
-				<button class="mini-btn" type="default" size="mini">基本设置</button>
-				<button class="mini-btn" type="default" size="mini">管理员配置</button>
+				<button class="mini-btn" type="default" size="mini" @click="adminEdit(item.id)">基本设置</button>
+				<button class="mini-btn" type="default" size="mini" @click="adminUser(item.id)">管理员配置</button>
 			</view>
 		</uni-card>
+		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
+		<uni-fab ref="fab" horizontal="right" vertical="bottom" :pattern="pattern" @fabClick="addAdmin" />
 	</view>
 </template>
 
@@ -24,63 +26,95 @@
 			return {
 				page: 1,
 				size: 10,
+				totalPage: 0,
 				keyword: "",
-				adminListUrl: "http://hsc.zhaomaomao.net/admin/",
-				adminList: [
-					{
-						company: "公司名称",
-						contractStartAt: "2022-06-28",
-						contractEndAt: "2022-07-01",
-						comment: "备注信息",
-						name: "张三",
-						account: "13588888888",
-					}
-				]
+				adminList: [],
+				pattern: {
+					selectedColor: '#0260a2',
+					buttonColor: '#0260a2',
+				},
+				loadMoreText: "加载中...",
+				showLoadMore: false
 			}
 		},
-		created() {
-			// this.getAdminList()
+		onNavigationBarButtonTap(e) {
+			uni.navigateTo({
+				url: '/pages/person/index',
+				animationType: 'slide-in-right',
+				animationDuration: 200
+			})
+		},
+		onLoad() {
+			this.getAdminList()
+		},
+		onUnload() {
+			this.totalPage = 0
+			this.adminList = []
+			this.loadMoreText = "加载更多"
+			this.showLoadMore = false
+		},
+		onPullDownRefresh() {
+			this.adminList = []
+			this.page = 1
+			this.getAdminList()
+		},
+		onReachBottom() {
+			if (this.adminList.length < this.totalPage) {
+				this.showLoadMore = true
+				this.page++;
+				this.getAdminList()
+			} else {
+				this.loadMoreText = "没有更多数据了"
+			}
 		},
 		methods: {
-			async getAdminList(){
-				let res, err
-				// #ifndef VUE3
-				[err, res] = await uni.request({
-					url: this.adminListUrl,
-					dataType: 'text',
-					header:{
-						Authentication: "hdlpwT6abxrBCLb9VYx4PKa7Op2b53JikSbEZP2vGzd7YIFY2XQL3msinffEFv8p"
-					},
-					data: {
-						page: this.page,
-						size: this.size,
-						keyword: this.keyword,
-						noncestr: Date.now()
-					}
+			getAdminList(){
+				this.$http.httpGet('/admin',{
+					page: this.page,
+					size: this.size,
+					keyword: this.keyword
+				}).then((res) => {
+					if(res.data)this.adminList.push.apply(this.adminList,res.data)
+					this.totalPage = res.total
+					uni.stopPullDownRefresh()
+				})
+				.catch((error) => {
+				    console.log(error);
 				});
-				// #endif
-				// #ifdef VUE3
-				try {
-				res = await uni.request({
-					url: requestUrl,
-					dataType: 'text',
-					data: {
-						noncestr: Date.now()
-					}
-				});
-				} catch(e){
-					err=e
-				}
-				// #endif
-				if (err) {
-					console.log('request fail', err);
-					uni.showModal({
-						content: err.errMsg,
-						showCancel: false
+			},
+			adminEdit(id){
+				uni.navigateTo({
+					url: 'admin-edit?id='+id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			adminUser(id){
+				uni.navigateTo({
+					url: 'admin-user?id='+id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			accountLogin(_id,_account,_password){
+				this.$http.httpPost('/admin/fake/'+_id+'/',this.valiFormData).then(res => {
+					this.$store.commit("UPDATEUSERS", res);
+					this.getPermission()
+					uni.navigateTo({
+					    url: '/pages/person/index'
 					});
-				} else {
-					console.log('request success', res)
-				}
+				})
+			},
+			async getPermission() {
+				const data = await this.$http.httpGet('/permission/')
+				this.$store.commit("UPDATEPERMISSION", data);
+			},
+			addAdmin(){
+				uni.navigateTo({
+				    url: 'admin-add',
+				    animationType: 'slide-in-right',
+				    animationDuration: 200
+				});
 			}
 		}
 	}
@@ -92,8 +126,8 @@
 		padding: 20rpx;
 	}
 	
-	.detection-list{
-		margin-top: 10px !important;
+	.uni-card{
+		margin-bottom: 20rpx !important;
 	}
 	
 	.custom-cover {

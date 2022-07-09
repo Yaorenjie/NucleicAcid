@@ -17,7 +17,7 @@
 /* 颜色变量 */
 
 /* 行为相关颜色 */
-$uni-color-primary: #007aff;
+$uni-color-primary: #0260a2;
 $uni-color-success: #4cd964;
 $uni-color-warning: #f0ad4e;
 $uni-color-error: #dd524d;
@@ -207,7 +207,7 @@ form {
 	background:#09BB07; color:#FFF;
 }
 .uni-bg-blue{
-	background:#007AFF; color:#FFF;
+	background:#0260a2; color:#FFF;
 }
 /* 标题 */
 .uni-h1 {font-size: 80rpx; font-weight:700;}
@@ -294,11 +294,11 @@ radio-group label, checkbox-group label{
 }
 .uni-badge-primary {
 	color: #fff;
-	background-color: #007aff
+	background-color: #0260a2
 }
 .uni-badge-blue.uni-badge-inverted,
 .uni-badge-primary.uni-badge-inverted {
-	color: #007aff;
+	color: #0260a2;
 	background-color: transparent
 }
 .uni-badge-green,
@@ -430,7 +430,7 @@ radio-group label, checkbox-group label{
 	color: #8f8f94;
 }
 .uni-card-link {
-	color: #007AFF;
+	color: #0260a2;
 }
 
 /* 列表 */
@@ -857,7 +857,7 @@ radio-group label, checkbox-group label{
 	content: '\e438';
 }
 .feedback-submit {
-	background: #007AFF;
+	background: #0260a2;
 	color: #FFFFFF;
 	margin: 20rpx;
 }
@@ -960,7 +960,7 @@ radio-group label, checkbox-group label{
 }
 
 .uni-tab-bar .active {
-	color: #007AFF;
+	color: #0260a2;
 }
 
 .uni-tab-bar .swiper-box {
@@ -1154,7 +1154,7 @@ radio-group label, checkbox-group label{
 }
 
 .uni-icon.uni-active {
-	color: #007aff;
+	color: #0260a2;
 }
 
 .uni-icon-contact:before {
@@ -1541,5 +1541,14 @@ radio-group label, checkbox-group label{
 }
 
 .left-win-active text{
-	color: #007AFF !important;
+	color: #0260a2 !important;
+}
+uni-button[type=primary]{
+	background-color: $uni-color-primary;
+}
+.uni-stat__actived{
+	outline:none !important;
+}
+.uni-edit-form {
+	padding: 0 20rpx 40rpx 20rpx;
 }

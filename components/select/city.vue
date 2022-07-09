@@ -1,14 +1,10 @@
 <template>
-	<view class="input-box-card">
-		<uni-card is-full :is-shadow="false">
-			<view class="input-box">
-				<picker class="pickerList" mode="multiSelector" :range="newProvinceDataList" range-key="text"
-					:value="multiIndex" @change="pickerChange" @columnchange="pickerColumnchange">
-					<view class="select-box">{{select}}</view>
-				</picker>
-				<view @click="clearCk">清空</view>
-			</view>
-		</uni-card>
+	<view class="input-box">
+		<picker class="pickerList" mode="multiSelector" :range="newProvinceDataList" range-key="text"
+			:value="multiIndex" @change="pickerChange" @columnchange="pickerColumnchange">
+			<view class="select-box">{{select}}</view>
+		</picker>
+		<uni-icons class="input-uni-icon" type="clear" size="18" color="#fff" @click="clearCk" />
 	</view>
 </template>
 
@@ -82,16 +78,23 @@
 </script>
 
 <style lang="scss" scoped>
-	.input-box-card {
-		margin-bottom: 20px;
-	}
-
 	.input-box {
+		width: 100%;
 		display: flex;
-		justify-content: space-between;
-	}
-
-	.select-box {
-		width: calc(100vw - 100px);
+		position: relative;
+		align-items: center;
+		uni-picker{
+			width: 100%;
+			background: rgba(255, 255, 255, .5);
+			border-radius: 20px;
+			height: 30px;
+			text-align: center;
+			line-height: 30px;
+		}
+		.uni-icons{
+			position: absolute;
+			top: 12px;
+			right: 10px;
+		}
 	}
 </style>

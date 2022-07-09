@@ -8,12 +8,9 @@
 						<uni-easyinput v-model="valiFormData.name" />
 					</uni-forms-item>
 				</uni-forms>
+				<button type="primary" @click="submit('valiForm')">提交</button>
 			</view>
 		</uni-section>
-		<view class="button-group">
-			<button type="primary" size="mini" @click="cancel()">取消</button>
-			<button type="primary" size="mini" @click="submit('valiForm')">提交</button>
-		</view>
 	</view>
 </template>
 
@@ -52,13 +49,6 @@
 			}
 		},
 		methods: {
-			cancel() {
-				uni.navigateTo({
-					url: '/pages/detection/detection-edit/detection-edit',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
 					console.log(this.valiFormData.name)
@@ -67,13 +57,13 @@
 				}).catch(err => {
 					console.log('err', err);
 				})
+			},
+			cancel () {
+				uni.navigateBack();
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	.uni-edit-form {
-		padding: 0 20rpx;
-	}
 </style>

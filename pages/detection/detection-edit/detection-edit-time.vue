@@ -1,17 +1,15 @@
 <template>
 	<view>
 		<uni-section class="uni-section-detection" title="编辑工作时间" type="line">
-			<view class="uni-edit-form" v-for="(item, index) in times" :key="index">
-				<timeRegion :times="item" :index="index" @bindTimeChange="bindTimeChange"
-					@bindTimeDelete="bindTimeDelete" />
+			<view class="uni-edit-form">
+				<uni-group mode="card" :title="'工作时段'+(index+1)" v-for="(item, index) in times" :key="index">
+					<timeRegion :times="item" :index="index" @bindTimeChange="bindTimeChange"
+						@bindTimeDelete="bindTimeDelete" />
+				</uni-group>
+				<button type="primary" @click="submit('valiForm')">提交</button>
 			</view>
 		</uni-section>
-		
-		<view class="button-group">
-			<button type="primary" size="mini" @click="addOne">添加工作时间段</button>
-			<button type="primary" size="mini" @click="cancel">取消</button>
-			<button type="primary" size="mini" @click="submit('valiForm')">提交</button>
-		</view>
+		<uni-fab ref="fab" horizontal="right" vertical="bottom" :pattern="pattern" @fabClick="addOne" />
 	</view>
 </template>
 
@@ -26,7 +24,11 @@
 				id: '',
 				value: '',
 				// 校验表单数据
-				times: []
+				times: [],
+				pattern: {
+					selectedColor: '#0260a2',
+					buttonColor: '#0260a2',
+				}
 			}
 		},
 		computed: {
@@ -92,8 +94,12 @@
 	}
 </script>
 
-<style lang="scss">
-	.uni-edit-form {
-		padding: 0 20rpx;
+<style lang="scss" scoped>
+	.uni-group--card{
+		position: relative;
+		margin: 0;
+	}
+	uni-button{
+		margin-top: 40rpx;
 	}
 </style>
