@@ -1,18 +1,19 @@
 <template>
 	<view class="container">
-		<uni-card v-for="item in adminList" :title="item.company" :isFull="true" :sub-title="item.comment" :extra="item.contractStartAt+' 至 '+item.contractEndAt">
+		<view class="uni-form-item uni-column">
+			<uni-easyinput suffixIcon="search" v-model="search.keyWord" placeholder="请输入姓名/手机号" @confirm="initList" @change="initList" @iconClick="initList"></uni-easyinput>
+		</view>
+		<button size="mini" class="mini-btn" type="default"  @click="addCk()">新增</button>
+		<uni-card class="card-one" v-for="(item, index) in adminList" :key="index" :title="item.role" :isFull="true">
 			<view class="uni-flex uni-row uni-align-center">
 				<uni-icons type="person" size="24"></uni-icons>
 				<text class="uni-h4 uni-ml5">{{item.name}}</text>
 				<text class="text uni-ml5">{{item.account}}</text>
 			</view>
 			<view slot="actions" class="card-actions">
-				<view class="card-actions-item" @click="actionsEdit(1)">
-					<uni-icons type="auth-filled" size="24" color="#999"></uni-icons>
-					<text class="card-actions-item-text">无痕登录</text>
-				</view>
-				<button class="mini-btn" type="default" size="mini">基本设置</button>
-				<button class="mini-btn" type="default" size="mini">管理员配置</button>
+				<button class="mini-btn" type="default" size="mini" @click="resetPwd(item)">重置密码</button>
+				<button class="mini-btn" type="default" size="mini" @click="enableCk(item, index)">{{item.state === 1 ? '禁' : '启'}}用</button>
+				<button class="mini-btn" type="default" size="mini" @click="editCk(item)">编辑</button>
 			</view>
 		</uni-card>
 		<uni-load-more :status="status"></uni-load-more>
@@ -48,30 +49,62 @@
 		},
 		onLoad() {
 			uni.startPullDownRefresh()
-			this.getList()
 		},
 		onPullDownRefresh () {
 		    this.detectionList = []
 			this.search.page = 1
 		    this.getList()
 		    setTimeout(() => {
-		      uni.stopPullDownRefresh ();
+		      uni.stopPullDownRefresh ()
 		    }, 1000);
 		},
 		onReachBottom(){
 			if(this.detectionList.length < this.total){
-				this.search.page ++;
+				this.search.page ++
 			    this.getList()
 			}
 		},		
 		methods: {
+			initList () {
+				this.search.page = 1
+				this.getList()
+			},
 			async getList(){
 				this.status = 'loading';
 				const data = await this.$http.httpGet('/manager/', this.search)
-				console.log(data)
 				this.total = data.total
-				this.detectionList = data.data
-				if(this.detectionList.length >= this.total) this.status = 'noMore'
+				this.adminList = data.data
+				if(this.adminList.length >= this.total) this.status = 'noMore'
+			},
+			editCk (item) {
+				uni.navigateTo({
+					url: '/pages/administrators/edit?id=' + item.id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			addCk () {
+				uni.navigateTo({
+					url: '/pages/administrators/edit',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
+			async resetPwd (item) {
+				const data = await this.$http.httpPost(`/manager/${item.id}/pwd/`)
+				console.log(data)
+			},
+			async enableCk (item, index) {
+				const changeState = item.state === 1 ? 0 : 1
+				const data = await this.$http.httpPost(`/manager/${item.id}/state/`, {
+					state: changeState
+				})
+				uni.showToast({
+					title: 操作成功,
+					icon: 'none',
+					duration: 2000
+				})
+				this.adminList[index].state = changeState
 			}
 		}
 	}
@@ -133,5 +166,8 @@
 	}
 	.uni-ml5{
 		margin-left: 5px;
+	}
+	.card-one {
+		margin-bottom: 20px!important;
 	}
 </style>

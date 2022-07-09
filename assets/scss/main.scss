@@ -1,0 +1,22 @@
+.flex-end{
+	display: flex;
+	justify-content: flex-end;
+	uni-button{
+		margin: 0;
+	}
+}
+.button-group {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 30px;
+	display: flex;
+	justify-content: space-around;
+}
+.uni-section{
+	margin-top: 0;
+}
+.uni-section-detection{
+	max-height: calc(100vh - 130px);
+	overflow-y: auto;
+}

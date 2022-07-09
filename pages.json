@@ -94,7 +94,14 @@
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": true
 		    }
-		    
+		},
+		{
+		    "path" : "pages/administrators/edit",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
 		},
 		{
             "path" : "pages/admin/admin",
