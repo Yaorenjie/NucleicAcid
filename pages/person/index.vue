@@ -1,49 +1,17 @@
 <template>
 	<view class="container">
-		<uni-group title="核酸采样点智能推荐" margin-top="0">
-			<view class="uni-list-item" v-for="(item, index) in list" :key="index">
-				<view class="uni-list-item__container">
-					<view class="uni-list-item__content">
-						<text class="uni-list-item__content-title">{{item.name}}</text>
-					</view>
-					<view class="uni-list-item__extra" @click="urlCk(item.path)">
-						<uni-icons type="right" size="20"></uni-icons>
-					</view>
-				</view>
-			</view>
-		</uni-group>
-		<uni-group title="基本信息" margin-top="0">
-			<view class="uni-list-item">
-				<view class="uni-list-item__container">
-					<view class="uni-list-item__content">
-						<text class="uni-list-item__content-title">姓名</text>
-					</view>
-					<view class="uni-list-item__extra">
-						<text class="uni-list-item__content-title">{{user.name}}</text>
-					</view>
-				</view>
-			</view>
-			<view class="uni-list-item">
-				<view class="uni-list-item__container">
-					<view class="uni-list-item__content">
-						<text class="uni-list-item__content-title">手机号</text>
-					</view>
-					<view class="uni-list-item__extra">
-						<text class="uni-list-item__content-title">{{user.account}}</text>
-					</view>
-				</view>
-		    </view>
-			<view class="uni-list-item">
-				<view class="uni-list-item__container">
-					<view class="uni-list-item__content">
-						<text class="uni-list-item__content-title">退出</text>
-					</view>
-					<view class="uni-list-item__extra" @click="logOut">
-						<uni-icons type="right" size="20"></uni-icons>
-					</view>
-				</view>
-			</view>
-		</uni-group>
+		<uni-section title="管理中心" type="line">
+			<ul-list>
+				<uni-list-item v-for="(item,index) in list" :key="index" showArrow :title="item.name" clickable @click="urlCk(item.path)"/>
+			</ul-list>
+		</uni-section>
+		<uni-section title="基本信息" type="line">
+			<ul-list margin-top="0">
+				<uni-list-item title="姓名" :rightText="user.name"/>
+				<uni-list-item title="手机号" :rightText="user.account"/>
+				<uni-list-item title="退出" showArrow clickable @click="logOut"/>
+			</ul-list>
+		</uni-section>
 	</view>
 </template>
 
@@ -51,7 +19,6 @@
 	export default {
 		data() {
 			return {
-				title: "核酸检测点",
 				list: [
 					{
 						name: "用户管理",
@@ -79,6 +46,10 @@
 			// 	return this.$store.state.permission
 			// }
 		},
+		// onLoad(){
+		// 	this.list = this.$store.state.permission
+		// 	console.log(this.list)
+		// },
 		methods: {
 			urlCk (url) {
 				uni.navigateTo({
@@ -104,36 +75,13 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-
-	.uni-list-item {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex: 1;
-		flex-direction: row;
-		background-color: #FFFFFF;
-	}
-
-
-	.uni-list-item__container {
-		padding: 12px 15px;
-		width: 100%;
-		flex: 1;
-		position: relative;
-		/* #ifndef APP-NVUE */
-		display: flex;
-		box-sizing: border-box;
-		/* #endif */
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		border-bottom-style: solid;
-		border-bottom-width: 1px;
-		border-bottom-color: #eee;
-	}
-
-	.uni-list-item__content-title {
-		font-size: 14px;
+<style lang="scss">
+	.container{
+		.uni-section{
+			margin-top: 20rpx;
+			&:nth-child(1){
+				margin-top: 0;
+			}
+		}
 	}
 </style>
