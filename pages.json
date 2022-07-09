@@ -100,7 +100,7 @@
             "path" : "pages/admin/admin",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "用户管理",
                 "enablePullDownRefresh": false
             }
             
@@ -109,7 +109,7 @@
             "path" : "pages/admin/admin-edit",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "基本设置",
                 "enablePullDownRefresh": false
             }
             
@@ -118,7 +118,7 @@
             "path" : "pages/admin/admin-user",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "管理员配置",
                 "enablePullDownRefresh": false
             } 
         }
@@ -126,7 +126,7 @@
             "path" : "pages/role/role",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "角色管理",
                 "enablePullDownRefresh": false
             }
             
@@ -148,10 +148,10 @@
 		}
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "rgb(0 122 255)",
+		"backgroundColor": "#fefefe",
 		"app-plus": {
 			"background": "#efeff4"
 		}

@@ -60,9 +60,11 @@
 		methods: {
 			getAdminInfo(id){
 				this.$http.httpGet('/admin/'+id+'/').then((res) => {
-					console.log(res)
-					this.valiFormData = res
-					console.log(this.valiFormData)
+					this.$set(this.valiFormData,'id',id)
+					this.$set(this.valiFormData,'company',res.company)
+					this.$set(this.valiFormData,'comment',res.comment)
+					this.$set(this.valiFormData,'contractStartAt',res.contractStartAt)
+					this.$set(this.valiFormData,'contractEndAt',res.contractEndAt)
 				})
 				.catch((error) => {
 				    console.log(error);
@@ -83,8 +85,30 @@
 				})
 			},
 			addAdmin(){
+				this.$http.httpPost('/admin/',this.valiFormData).then(res => {
+					uni.showModal({
+						content: '添加成功！',
+						showCancel: false
+					})
+					uni.navigateTo({
+						url: 'admin',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
+				})
 			},
 			editAdmin(){
+				this.$http.httpPut('/admin/'+this.valiFormData.id+'/company/',this.valiFormData).then(res => {
+					uni.showModal({
+						content: '基本信息修改成功！',
+						showCancel: false
+					})
+					uni.navigateTo({
+						url: 'admin',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
+				})
 			}
 		}
 	}

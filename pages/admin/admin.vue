@@ -7,7 +7,7 @@
 				<text class="text uni-ml5">{{item.account}}</text>
 			</view>
 			<view slot="actions" class="card-actions">
-				<view class="card-actions-item" @click="actionsEdit(1)">
+				<view class="card-actions-item" @click="accountLogin(item.id,item.account,item.password)">
 					<uni-icons type="auth-filled" size="24" color="#999"></uni-icons>
 					<text class="card-actions-item-text">无痕登录</text>
 				</view>
@@ -67,6 +67,19 @@
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
+			},
+			accountLogin(_id,_account,_password){
+				this.$http.httpPost('/admin/fake/'+_id+'/',this.valiFormData).then(res => {
+					this.$store.commit("UPDATEUSERS", res);
+					this.getPermission()
+					uni.navigateTo({
+					    url: '/pages/person/index'
+					});
+				})
+			},
+			async getPermission() {
+				const data = await this.$http.httpGet('/permission/')
+				this.$store.commit("UPDATEPERMISSION", data);
 			}
 		}
 	}

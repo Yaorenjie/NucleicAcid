@@ -4,23 +4,25 @@
 		<view class="uni-edit-form">
 			<!-- 基础表单校验 -->
 			<uni-forms ref="valiForm" label-position="top" label-width="200" :rules="rules" :modelValue="valiFormData">
-				<uni-forms-item label="角色名称" name="name">
-					<uni-easyinput v-model="valiFormData.company" />
+				<uni-forms-item label="角色名称" name="label">
+					<uni-easyinput v-model="valiFormData.label" />
 				</uni-forms-item>
-				<uni-forms-item label="角色权限" name="role">
-					<checkbox-group @change="checkAllChange" v-for="group in permissionList">
-						<label class="uni-list-cell uni-list-cell-pd">
-							<view>
-								<checkbox :value="group.id" :checked="group.checked" />
-							</view>
-							<view>{{item.label}}</view>
-						</label>
-						<label class="uni-list-cell uni-list-cell-pd" v-for="item in group.child" :key="item.value">
-							<view>
-								<checkbox :value="item.value" :checked="item.checked" />
-							</view>
-							<view>{{item.name}}</view>
-						</label>
+				<uni-forms-item label="角色权限" name="permission">
+					<checkbox-group @change="checkboxChange">
+						<view v-for="group in permissionList" :key="'role-'+group.value">
+							<label class="uni-list-cell uni-list-cell-pd">
+								<view>
+									<checkbox :value="group.value" :checked="group.checked" />
+								</view>
+								<view>{{group.text}}</view>
+							</label>
+							<label class="uni-list-cell uni-list-cell-pd" v-for="item in group.child" :key="item.value">
+								<view>
+									<checkbox :value="item.value" :checked="item.checked" />
+								</view>
+								<view>{{item.text}}</view>
+							</label>
+						</view>
 					</checkbox-group>
 				</uni-forms-item>
 			</uni-forms>
@@ -38,10 +40,9 @@
 				// 校验表单数据
 				valiFormData: {
 					id: 0,
-					company: '',
-					comment: '',
-					contractStartAt: '',
-					contractEndAt: ''
+					label: '',
+					name: '',
+					permission: []
 				},
 				// 校验规则
 				rules: {
@@ -54,24 +55,17 @@
 				}
 			}
 		},
-		created() {
-			this.getPermission()
-		},
 		onLoad(e){
 			if(e.id){
-				console.log(e.id)
 				this.$set(this.valiFormData,'id', e.id)
 				this.getRoleInfo(e.id)
 			}
 		},
 		methods: {
-			roleCheckbox(){
-			},
 			getRoleInfo(id){
 				this.$http.httpGet('/admin/role/'+id+'/').then((res) => {
-					console.log(res)
 					this.valiFormData = res
-					console.log(this.valiFormData)
+					this.getPermission()
 				})
 				.catch((error) => {
 				    console.log(error);
@@ -79,33 +73,81 @@
 			},
 			getPermission(){
 				this.$http.httpGet('/admin/permission/').then((res) => {
-					console.log(res)
-					this.permissionList = res.data
+					this.resetPermissionList(res)
 				})
 				.catch((error) => {
 				    console.log(error);
 				});
 			},
-			resetPermissionList(){
-				let _permissionList=[]
+			resetPermissionList(permissionList){
+				let _permissionList={}
 				let _permissionItem={}
-				let _permissionChild=[]
+				let _permissionChild={}
 				let _permissionChildItem={}
-				for (let i in this.permissionList) {
-					_permissionItem.text=this.permissionList[i].label
-					_permissionItem.value=this.permissionList[i].id
-					_permissionChild=[]
-					for (let i in this.permissionList[i].child) {
-						
+				for (let i in permissionList) {
+					_permissionItem={}
+					_permissionItem.text=permissionList[i].label
+					_permissionItem.value=permissionList[i].id.toString()
+					_permissionItem.checked=this.valiFormData.permission.indexOf(permissionList[i].id)>-1
+					_permissionItem.child={}
+					_permissionChild={}
+					for (let j in permissionList[i].child) {
+						_permissionChildItem={}
+						_permissionChildItem.text=permissionList[i].child[j].label
+						_permissionChildItem.value=permissionList[i].child[j].id.toString()
+						_permissionChildItem.checked=this.valiFormData.permission.indexOf(permissionList[i].child[j].id)>-1
+						_permissionChild[permissionList[i].child[j].id]=_permissionChildItem
+						if(parseInt(j)===(permissionList[i].child.length-1)){
+							// _permissionChildItem.child=_permissionChild
+							_permissionItem.child=_permissionChild
+							// console.log('结果',_permissionItem)
+							// 一级标签id为key值
+							_permissionList[permissionList[i].id]=_permissionItem
+							
+						}
+					}
+					if(parseInt(i)===(permissionList.length-1)){
+						this.permissionList=_permissionList
+						console.log('结果',this.permissionList)
 					}
 				}
+				
+			},
+			checkboxChange(e){
+				this.$set(this.valiFormData,'permission',e.detail.value)
+				console.log(this.valiFormData)
 			},
 			submit(ref){
 				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					this.valiFormData.id===0?this.addAdmin():this.editAdmin()
+					this.valiFormData.id===0?this.addRole():this.editRole()
 				}).catch(err => {
 					console.log('err', err);
+				})
+			},
+			addRole(){
+				this.$http.httpPost('/admin/role/',this.valiFormData).then(res => {
+					uni.showModal({
+						content: '添加角色成功！',
+						showCancel: false
+					})
+					uni.navigateTo({
+						url: 'role',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
+				})
+			},
+			editRole(){
+				this.$http.httpPut('/admin/role/'+this.valiFormData.id+'/',this.valiFormData).then(res => {
+					uni.showModal({
+						content: '编辑角色成功！',
+						showCancel: false
+					})
+					uni.navigateTo({
+						url: 'role',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
 				})
 			}
 		}
@@ -115,6 +157,9 @@
 <style lang="scss">
 	.uni-edit-form{
 		padding: 0 20rpx;
+		.uni-list-cell{
+			justify-content:flex-start;
+		}
 	}
 	uni-picker{
 		.uni-input{

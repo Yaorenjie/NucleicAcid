@@ -24,33 +24,26 @@
 	export default {
 		data() {
 			return {
-				role: [
-					{
-						text: "账号管理员",
-						value: 2
-					},
-					{
-						text: "基础管理员",
-						value: 3
-					}
-				],
+				role: [],
 				// 校验表单数据
 				valiFormData: {
 					id: 0,
 					account: '',
-					company: '',
-					comment: '',
-					contractStartAt: '',
-					contractEndAt: '',
 					name: '',
 					role: []
 				},
 				// 校验规则
 				rules: {
-					company: {
+					account: {
 						rules: [{
 							required: true,
-							errorMessage: '单位名称不能为空'
+							errorMessage: '手机号码不能为空'
+						}]
+					},
+					name: {
+						rules: [{
+							required: true,
+							errorMessage: '姓名不能为空'
 						}]
 					}
 				}
@@ -69,8 +62,7 @@
 		methods: {
 			getRole(){
 				this.$http.httpGet('/admin/role_opt/').then((res) => {
-					console.log(res)
-					// this.role = res
+					this.role = res
 				})
 				.catch((error) => {
 				    console.log(error);
@@ -78,9 +70,10 @@
 			},
 			getAdminInfo(id){
 				this.$http.httpGet('/admin/'+id+'/').then((res) => {
-					console.log(res)
-					this.valiFormData = res
-					console.log(this.valiFormData)
+					this.$set(this.valiFormData,'id',id)
+					this.$set(this.valiFormData,'account',res.account)
+					this.$set(this.valiFormData,'name',res.name)
+					this.$set(this.valiFormData,'role',res.role)
 				})
 				.catch((error) => {
 				    console.log(error);
@@ -94,15 +87,23 @@
 			},
 			submit(ref){
 				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					this.valiFormData.id===0?this.addAdmin():this.editAdmin()
+					this.editAdmin()
 				}).catch(err => {
 					console.log('err', err);
 				})
 			},
-			addAdmin(){
-			},
 			editAdmin(){
+				this.$http.httpPost('/admin/'+this.valiFormData.id+'/',this.valiFormData).then(res => {
+					uni.showModal({
+						content: '管理员配置成功！',
+						showCancel: false
+					})
+					uni.navigateTo({
+						url: 'admin',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
+				})
 			}
 		}
 	}
