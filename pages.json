@@ -104,6 +104,22 @@
 		    }
 		},
 		{
+		    "path" : "pages/administrators/resetPwd",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/account/list",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true
+		    }
+		},
+		{
             "path" : "pages/admin/admin",
             "style" :                                                                                    
             {

@@ -82,6 +82,7 @@
 					username: this.formData.phone,
 					password: this.formData.password
 				}).then((res) => {
+					res.account = this.formData.phone
 					this.$store.commit("UPDATEUSERS", res);
 					this.getPermission()
 					uni.navigateTo({
