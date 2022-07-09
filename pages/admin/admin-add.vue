@@ -3,25 +3,7 @@
 		<view class="uni-edit-form">
 			<!-- 基础表单校验 -->
 			<uni-forms ref="valiForm" label-position="top" label-width="200" :rules="rules" :modelValue="valiFormData">
-				<uni-section title="基本信息" type="line">
-					<uni-forms-item label="单位名称" name="company">
-						<uni-easyinput v-model="valiFormData.company" />
-					</uni-forms-item>
-					<uni-forms-item label="备注信息" name="comment">
-						<uni-easyinput type="textarea"  v-model="valiFormData.comment" />
-					</uni-forms-item>
-					<uni-forms-item label="合同开始日期" name="contractStartAt">
-						<picker mode="date" :value="valiFormData.contractStartAt" @change="bindContractStartAt">
-							<view class="uni-input">{{valiFormData.contractStartAt}}</view>
-						</picker>
-					</uni-forms-item>
-					<uni-forms-item label="合同结束日期" name="contractEndAt">
-						<picker mode="date" :value="valiFormData.contractEndAt" @change="bindContractEndAt">
-							<view class="uni-input">{{valiFormData.contractEndAt}}</view>
-						</picker>
-					</uni-forms-item>
-				</uni-section>
-				<uni-section title="管理员配置" type="line">
+				<uni-section title="添加管理员" type="line">
 					<uni-forms-item label="姓名" name="name">
 						<uni-easyinput v-model="valiFormData.name" />
 					</uni-forms-item>
@@ -45,10 +27,6 @@
 				// 校验表单数据
 				valiFormData: {
 					id: 0,
-					company: '',
-					comment: '',
-					contractStartAt: '',
-					contractEndAt: '',
 					password: '',
 					account: '',
 					name: '',
@@ -57,24 +35,6 @@
 				role: [],
 				// 校验规则
 				rules: {
-					company: {
-						rules: [{
-							required: true,
-							errorMessage: '单位名称不能为空'
-						}]
-					},
-					contractStartAt: {
-						rules: [{
-							required: true,
-							errorMessage: '合同日期开始日期不能为空'
-						}]
-					},
-					contractEndAt: {
-						rules: [{
-							required: true,
-							errorMessage: '合同日期结束日期不能为空'
-						}]
-					},
 					account: {
 						rules: [{
 							required: true,

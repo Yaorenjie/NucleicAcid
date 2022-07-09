@@ -113,6 +113,14 @@
 				}
             } 
         }
+		,{
+		    "path" : "pages/admin/admin-add",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "添加用户",
+		        "enablePullDownRefresh": false
+		    }
+		}
         ,{
             "path" : "pages/admin/admin-edit",
             "style" :                                                                                    
@@ -150,6 +158,33 @@
         }
         ,{
             "path" : "pages/role/role-edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/permission/permission",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "角色管理",
+                "enablePullDownRefresh": true,
+            	"app-plus": {
+            		"titleNView": {
+            			"buttons": [
+            				{
+            					"type": "menu"
+            				}
+            			]
+            		}
+            	}
+            }
+            
+        }
+        ,{
+            "path" : "pages/permission/permission-add",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

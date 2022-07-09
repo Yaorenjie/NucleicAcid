@@ -1546,3 +1546,6 @@ radio-group label, checkbox-group label{
 uni-button[type=primary]{
 	background-color: $uni-color-primary;
 }
+.uni-stat__actived{
+	outline:none !important;
+}

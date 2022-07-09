@@ -81,7 +81,7 @@
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
-			},
+			}
 		}
 	}
 </script>

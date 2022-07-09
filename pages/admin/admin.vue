@@ -74,7 +74,6 @@
 					size: this.size,
 					keyword: this.keyword
 				}).then((res) => {
-					let _adminList=[]
 					if(res.data)this.adminList.push.apply(this.adminList,res.data)
 					this.total = res.total
 					uni.stopPullDownRefresh()
