@@ -1,15 +1,20 @@
 <template>
 	<view class="container">
-		<view class="title">核酸采样点智能推荐</view>
-		<uni-forms :modelValue="formData" ref="form" :rules="rules">
-			<uni-forms-item label="手机号码:" name="phonenumber" maxlength="11">
+		<uni-forms label-width="0" :modelValue="formData" ref="form" :rules="rules">
+			<view class="login-logo">
+				<image class="slot-image" src="/static/login-logo.png" mode="widthFix"></image>
+			</view>
+			<uni-forms-item name="phonenumber" maxlength="11">
 				<uni-easyinput type="number" v-model="formData.phone" placeholder="请输入手机号" />
 			</uni-forms-item>
-			<uni-forms-item  name="password" label="密码:">
+			<uni-forms-item  name="password">
 				<uni-easyinput type="password" v-model="formData.password" password="true" placeholder="请输入密码" />
 			</uni-forms-item>
-			<uni-button @tap="login">登录</uni-button>
+			<uni-button type="primary" @tap="login">登录</uni-button>
 		</uni-forms>
+		<view class="login-bottom">
+			<image class="slot-image" src="/static/login-bottom.png" mode="heightFix"></image>
+		</view>
 	</view>
 </template>
 
@@ -101,13 +106,50 @@
 </script>
 
 <style lang="scss" scoped>
-	.container {
+	uni-page-body{
+		height: 100%;
 		overflow: hidden;
-		padding: 20rpx;
-		.title {
-			font-size: 42rpx;
+	}
+	.container {
+		display: flex;
+		height: 100%;
+		overflow: hidden;
+		flex-direction: column;
+		justify-content: space-between;
+		.login-logo{
+			display: flex;
+			justify-content: center;
+			align-items:center;
+			width: 100%;
+			margin: 100rpx 0;
 			text-align: center;
-			padding: 60rpx;
+			.slot-image{
+				width: 400rpx;
+				height: auto;
+			}
+		}
+		.login-bottom{
+			display: flex;
+			justify-content: flex-end;
+			align-items: flex-end;
+			width: 100%;
+			height: 33.3%;
+			text-align: right;
+			.slot-image{
+				width: auto;
+				height: 100%;
+			}
+		}
+		.title {
+			font-size: 60rpx;
+			text-align: center;
+			padding: 100rpx 0 60rpx 0;
+		}
+		.uni-forms{
+			padding: 20rpx;
+			.uni-forms-item__label{
+				height: 0;
+			}
 		}
 	}
 </style>

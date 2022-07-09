@@ -56,6 +56,7 @@
 			}
 		},
 		onLoad(e){
+			this.getPermission()
 			if(e.id){
 				this.$set(this.valiFormData,'id', e.id)
 				this.getRoleInfo(e.id)
@@ -65,7 +66,6 @@
 			getRoleInfo(id){
 				this.$http.httpGet('/admin/role/'+id+'/').then((res) => {
 					this.valiFormData = res
-					this.getPermission()
 				})
 				.catch((error) => {
 				    console.log(error);

@@ -15,6 +15,8 @@
 				<button class="mini-btn" type="default" size="mini" @click="adminUser(item.id)">管理员配置</button>
 			</view>
 		</uni-card>
+		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
+		<uni-fab ref="fab" horizontal="right" vertical="bottom" :pattern="pattern" @fabClick="addAdmin" />
 	</view>
 </template>
 
@@ -24,21 +26,46 @@
 			return {
 				page: 1,
 				size: 10,
+				totalPage: 0,
 				keyword: "",
-				adminList: [
-					{
-						company: "公司名称",
-						contractStartAt: "2022-06-28",
-						contractEndAt: "2022-07-01",
-						comment: "备注信息",
-						name: "张三",
-						account: "13588888888",
-					}
-				]
+				adminList: [],
+				pattern: {
+					selectedColor: '#0260a2',
+					buttonColor: '#0260a2',
+				},
+				loadMoreText: "加载中...",
+				showLoadMore: false
 			}
 		},
-		created() {
+		onNavigationBarButtonTap(e) {
+			uni.navigateTo({
+				url: '/pages/person/index',
+				animationType: 'slide-in-right',
+				animationDuration: 200
+			})
+		},
+		onLoad() {
 			this.getAdminList()
+		},
+		onUnload() {
+			this.totalPage = 0
+			this.adminList = []
+			this.loadMoreText = "加载更多"
+			this.showLoadMore = false
+		},
+		onPullDownRefresh() {
+			this.adminList = []
+			this.page = 1
+			this.getAdminList()
+		},
+		onReachBottom() {
+			if (this.adminList.length < this.total) {
+				this.showLoadMore = true
+				this.page++;
+				this.getAdminList()
+			} else {
+				this.loadMoreText = "没有更多数据了"
+			}
 		},
 		methods: {
 			getAdminList(){
@@ -47,8 +74,10 @@
 					size: this.size,
 					keyword: this.keyword
 				}).then((res) => {
-					console.log(res.data)
-					if(res.data)this.adminList=res.data
+					let _adminList=[]
+					if(res.data)this.adminList.push.apply(this.adminList,res.data)
+					this.total = res.total
+					uni.stopPullDownRefresh()
 				})
 				.catch((error) => {
 				    console.log(error);
@@ -80,6 +109,13 @@
 			async getPermission() {
 				const data = await this.$http.httpGet('/permission/')
 				this.$store.commit("UPDATEPERMISSION", data);
+			},
+			addAdmin(){
+				uni.navigateTo({
+				    url: 'admin-add',
+				    animationType: 'slide-in-right',
+				    animationDuration: 200
+				});
 			}
 		}
 	}

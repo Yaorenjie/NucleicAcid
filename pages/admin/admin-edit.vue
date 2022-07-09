@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-section :title="valiFormData.id===0?'添加':'编辑'+'管理员'" type="line">
+		<uni-section :title="(valiFormData.id===0?'添加':'编辑')+'管理员'" type="line">
 		<view class="uni-edit-form">
 			<!-- 基础表单校验 -->
 			<uni-forms ref="valiForm" label-position="top" label-width="200" :rules="rules" :modelValue="valiFormData">
@@ -37,7 +37,8 @@
 					company: '',
 					comment: '',
 					contractStartAt: '',
-					contractEndAt: ''
+					contractEndAt: '',
+					password: ''
 				},
 				// 校验规则
 				rules: {
@@ -46,18 +47,41 @@
 							required: true,
 							errorMessage: '单位名称不能为空'
 						}]
+					},
+					contractStartAt: {
+						rules: [{
+							required: true,
+							errorMessage: '合同日期开始日期不能为空'
+						}]
+					},
+					contractEndAt: {
+						rules: [{
+							required: true,
+							errorMessage: '合同日期结束日期不能为空'
+						}]
 					}
 				}
 			}
 		},
 		onLoad(e){
 			if(e.id){
-				console.log(e.id)
 				this.$set(this.valiFormData,'id', e.id)
 				this.getAdminInfo(e.id)
 			}
 		},
 		methods: {
+			getPassword(pasLen) {
+				const pasArr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9']
+				let password = ''
+				let pasArrLen = pasArr.length
+				let x=''
+				for (var i=0; i<pasLen; i++){
+					x = Math.floor(Math.random()*pasArrLen)
+					password += pasArr[x]
+				}
+				this.$set(this.valiFormData, 'password', password)
+				console.log(password)
+			},
 			getAdminInfo(id){
 				this.$http.httpGet('/admin/'+id+'/').then((res) => {
 					this.$set(this.valiFormData,'id',id)
@@ -78,23 +102,9 @@
 			},
 			submit(ref){
 				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					this.valiFormData.id===0?this.addAdmin():this.editAdmin()
+					this.editAdmin()
 				}).catch(err => {
 					console.log('err', err);
-				})
-			},
-			addAdmin(){
-				this.$http.httpPost('/admin/',this.valiFormData).then(res => {
-					uni.showModal({
-						content: '添加成功！',
-						showCancel: false
-					})
-					uni.navigateTo({
-						url: 'admin',
-						animationType: 'slide-in-left',
-						animationDuration: 200
-					})
 				})
 			},
 			editAdmin(){
