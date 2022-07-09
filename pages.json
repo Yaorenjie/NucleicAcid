@@ -120,15 +120,30 @@
 		        "navigationBarTitleText": "添加用户",
 		        "enablePullDownRefresh": false
 		    }
+		},
+		{
+		    "path" : "pages/administrators/resetPwd",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/account/list",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true
+		    }
 		}
-        ,{
+		,{
             "path" : "pages/admin/admin-edit",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "基本设置",
                 "enablePullDownRefresh": false
-            }
-            
+            } 
         }
         ,{
             "path" : "pages/admin/admin-user",

@@ -1,10 +1,7 @@
 <template>
 	<view class="container">
-		<selectCity @change="cityChange" />
-		<view class="flex-end">
-			<button size="mini" type="default" @click="addCk">添加采样点</button>
-		</view>
-		<uni-card v-for="(item, index) in detectionList" :key="index" @click="editCk(item.id)" class="detection-list"
+		<location @change="locationChange"></location>
+		<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
 			:title="item.name" :isFull="true" :sub-title="item.fullAddress"
 			:extra="item.distance === -1 ? '' : item.distance + '公里'">
 			<view class="uni-flex uni-row uni-justify-center uni-align-center">
@@ -33,10 +30,10 @@
 </template>
 
 <script>
-	import selectCity from '@/components/select/city.vue'
+	import location from '@/components/location.vue'
 	export default {
 		components: {
-			selectCity
+			location
 		},
 		data() {
 			return {
@@ -45,9 +42,6 @@
 				search: {
 					page: 1,
 					size: 10,
-					province: '',
-					city: '',
-					area: '',
 					latitude: '',
 					longitude: ''
 				},
@@ -59,9 +53,6 @@
 			// uni.startPullDownRefresh()
 		},
 		onShow() {
-			this.getLocation()
-			this.$set(this.search, 'page', 1)
-			this.getList()
 		},
 		onPullDownRefresh() {
 			this.detectionList = []
@@ -78,24 +69,9 @@
 			}
 		},
 		methods: {
-			getLocation() {
-				uni.getLocation({
-					type: 'wgs84',
-					geocode: true, //设置该参数为true可直接获取经纬度及城市信息
-					success: function(res) {
-						console.log(res)
-					},
-					fail: function() {
-						uni.showToast({
-							title: '获取地址失败，将导致部分功能不可用',
-							icon: 'none'
-						});
-					}
-				});
-			},
 			async getList() {
 				this.status = 'loading';
-				const data = await this.$http.httpGet('/admin/point/', this.search)
+				const data = await this.$http.httpGet('/api/point/', this.search)
 				console.log(data)
 				this.total = data.total
 				this.detectionList = [
@@ -104,37 +80,9 @@
 				]
 				if (this.detectionList.length >= this.total) this.status = 'noMore'
 			},
-			actionsEdit(id) {
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id=' + id,
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-			addCk() {
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id=0',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-			editCk(id) {
-				uni.navigateTo({
-					url: 'detection-edit/detection-edit?id=' + id,
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
-			cityChange(item) {
-				if (item.length > 0) {
-					this.$set(this.search, 'province', item[0])
-					this.$set(this.search, 'city', item[1])
-					this.$set(this.search, 'area', item[2])
-				} else {
-					this.$set(this.search, 'province', '')
-					this.$set(this.search, 'city', '')
-					this.$set(this.search, 'area', '')
-				}
+			locationChange(item) {
+				this.$set(this.search, 'latitude', item.latitude)
+				this.$set(this.search, 'longitude', item.longitude)
 				this.$set(this.search, 'page', 1)
 				this.getList()
 			}

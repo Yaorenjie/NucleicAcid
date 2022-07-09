@@ -6,7 +6,7 @@
 					<view class="uni-list-item__content">
 						<text class="uni-list-item__content-title">{{item.name}}</text>
 					</view>
-					<view class="uni-list-item__extra" @click="urlCk(item.url)">
+					<view class="uni-list-item__extra" @click="urlCk(item.path)">
 						<uni-icons type="right" size="20"></uni-icons>
 					</view>
 				</view>
@@ -29,7 +29,7 @@
 						<text class="uni-list-item__content-title">手机号</text>
 					</view>
 					<view class="uni-list-item__extra">
-						<text class="uni-list-item__content-title">123123345</text>
+						<text class="uni-list-item__content-title">{{user.account}}</text>
 					</view>
 				</view>
 		    </view>
@@ -61,11 +61,11 @@
 					},
 					{
 						name: "管理员管理",
-						url: "/pages/administrators/list"
+						path: "/pages/administrators/list"
 					},
 					{
 						name: "采样点管理",
-						url: "/pages/detection/detection"
+						path: "/pages/detection/detection"
 					},
 				],
 				loading: false
@@ -74,7 +74,10 @@
 		computed: {
 			user() {
 				return this.$store.state.users
-			}
+			},
+			// list() {
+			// 	return this.$store.state.permission
+			// }
 		},
 		methods: {
 			urlCk (url) {

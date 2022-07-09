@@ -93,6 +93,10 @@
 
 <style lang="scss">
 	.select-more-box {
+		border: 1px solid #F0F0F0;
+		height: 36px;
+		line-height:36px;
+		padding: 0 10px;
 		.popup-content {
 			height: 50vh;
 		}

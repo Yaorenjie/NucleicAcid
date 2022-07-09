@@ -50,8 +50,8 @@
 		},
 		methods: {
 			async getData () {
-				const data = await this.$http.httpPut('/admin/point/' + this.id + '/')
-				this.$store.commit("update_detectionData", data.data)
+				const data = await this.$http.httpGet('/admin/point/' + this.id + '/')
+				this.$store.commit("update_detectionData", data)
 			},
 			actionsEnable(e){
 				this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
@@ -119,15 +119,36 @@
 					longitude: ''
 				})
 			},
-			async submit () {
+			submit () {
 				if (this.validateForm()) return
- 				const data = await this.$http.httpPost('/admin/point/', {
+ 				if (this.id === 0 || this.id === '') this.addAjax()
+				else this.updateAjax()
+				
+			},
+			async addAjax () {
+				const data = await this.$http.httpPost('/admin/point/', {
 					...this.data,
 					...{
 						province: 0,
 						city: 0,
 						area: 0
 					}
+				})
+				uni.showToast({
+					title: '添加成功',
+					icon: 'none',
+					duration: 2000
+				})
+				this.cancel()
+			},
+			async updateAjax() {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+					...this.data
+				})
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					duration: 2000
 				})
 				this.cancel()
 			},

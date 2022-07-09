@@ -1,23 +1,25 @@
 <template>
 	<view>
-		<uni-forms ref="valiForm" :rules="rules" :modelValue="form" label-position="top" padding>
-			<uni-forms-item label="姓名" name="name">
-				<uni-easyinput v-model="form.name" />
-			</uni-forms-item>
-			<uni-forms-item label="手机" name="account">
-				<uni-easyinput v-model="form.account" />
-			</uni-forms-item>
-			<uni-forms-item label="角色" name="role">
-				<selectMore :value="form.role" :list="roleList" @change="changeRole" />
-			</uni-forms-item>
-			<uni-forms-item label="采样点" name="point">
-				<selectMore :value="form.point" :list="pointList" @change="changePointe" />
-			</uni-forms-item>
-		</uni-forms>
-		<view class="btn-list">
-			<button size="mini" type="primary" @click="cancel()">取消</button>
-			<button size="mini" type="primary" @click="submit('valiForm')">提交</button>	
-		</view>
+		<uni-card :is-shadow="false">
+			<uni-forms ref="valiForm" :rules="rules" :modelValue="form" label-position="top" padding>
+				<uni-forms-item label="姓名" name="name">
+					<uni-easyinput v-model="form.name" />
+				</uni-forms-item>
+				<uni-forms-item label="手机" name="account">
+					<uni-easyinput v-model="form.account" />
+				</uni-forms-item>
+				<uni-forms-item label="角色" name="role">
+					<selectMore :value="form.role" :list="roleList" @change="changeRole" />
+				</uni-forms-item>
+				<uni-forms-item label="采样点" name="point">
+					<selectMore :value="form.point" :list="pointList" @change="changePointe" />
+				</uni-forms-item>
+			</uni-forms>
+			<view class="btn-list">
+				<button size="mini" type="primary" @click="cancel()">取消</button>
+				<button size="mini" type="primary" @click="submit('valiForm')">提交</button>	
+			</view>
+		</uni-card>
 	</view>
 </template>
 

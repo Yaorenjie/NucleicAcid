@@ -48,7 +48,12 @@
 			// this.getAdminList()
 		},
 		onLoad() {
-			uni.startPullDownRefresh()
+			// uni.startPullDownRefresh()
+		},
+		onShow() {
+			this.detectionList = []
+			this.search.page = 1
+			this.getList()
 		},
 		onPullDownRefresh () {
 		    this.detectionList = []
@@ -91,16 +96,20 @@
 				})
 			},
 			async resetPwd (item) {
-				const data = await this.$http.httpPost(`/manager/${item.id}/pwd/`)
-				console.log(data)
+				uni.navigateTo({
+					url: '/pages/administrators/resetPwd?id=' + item.id,
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
 			},
 			async enableCk (item, index) {
 				const changeState = item.state === 1 ? 0 : 1
+				console.log(item.state, changeState)
 				const data = await this.$http.httpPost(`/manager/${item.id}/state/`, {
 					state: changeState
 				})
 				uni.showToast({
-					title: 操作成功,
+					title: '修改成功',
 					icon: 'none',
 					duration: 2000
 				})
