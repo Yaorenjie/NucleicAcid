@@ -100,7 +100,15 @@
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": true
+		        "enablePullDownRefresh": true,
+		        "app-plus": {
+		        	"titleNView": false,
+		        	"bounce": "none",
+		        	"pullToRefresh": {
+		        		"style": "circle",
+		        		"offset": "70px"
+		        	}
+		        }
 		    }
 		    
 		},
@@ -130,7 +138,15 @@
 		    }
 		},
 		{
-		    "path" : "pages/administrators/resetPwd",
+		    "path" : "pages/administrators/edit",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
+		    "path" : "pages/administrators/password",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",

@@ -92,8 +92,8 @@
 					console.log('err', err);
 				})
 			},
-			editAdmin(){
-				this.$http.httpPost('/admin/'+this.valiFormData.id+'/',this.valiFormData).then(res => {
+			async editAdmin(){
+				await this.$http.httpPost('/admin/'+this.valiFormData.id+'/',this.valiFormData).then(res => {
 					uni.showModal({
 						content: '管理员配置成功！',
 						showCancel: false

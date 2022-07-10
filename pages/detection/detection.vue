@@ -13,12 +13,15 @@
 					<view class="text">分钟</view>
 				</view>
 				<view class="uni-body">
-					<view>总排队人数：{{item.wait}}人</view>
-					<view>检测窗口：{{item.window}}个</view>
-					<view>采样时间：
-						<view v-for="(item1, index1) in item.time">
+					<view><label>总排队人数：</label><label>{{item.wait}}人</label></view>
+					<view>
+						<label>检测窗口：</label><label>{{item.window}}</label>个
+					</view>
+					<view>
+						<label>采样时间：</label>
+						<label v-for="(item1, index1) in item.time">
 							{{item1.startAt}} - {{item1.endAt}}
-						</view>
+						</label>
 					</view>
 				</view>
 			</uni-card>
@@ -85,7 +88,9 @@
 		onReachBottom() {
 			if (this.detectionList.length < this.totalPage) {
 				this.showLoadMore = true
-				this.$set(this.search,'page',this.search.page++)
+				let _page=this.search.page
+				_page++
+				this.$set(this.search,'page',_page)
 				this.getList()
 			} else {
 				this.loadMoreText = "没有更多数据了"
@@ -175,13 +180,12 @@
 <style lang="scss">
 	.container {
 		overflow: hidden;
-		// padding: 20rpx;
 	}
 	.detection-body{
-		padding: 0 20rpx;
+		padding: 0 20rpx !important;
 	}
 	.detection-list {
-		margin-top: 10px !important;
+		margin-top: 20rpx !important;
 	}
 
 	.custom-cover {
@@ -233,5 +237,13 @@
 
 	.no-border {
 		border-width: 0;
+	}
+	.uni-body{
+		label{
+			padding-right: 5rpx;
+		}
+		uni-view{
+			padding: 10rpx 0;
+		}
 	}
 </style>

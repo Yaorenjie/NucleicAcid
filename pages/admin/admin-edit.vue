@@ -107,8 +107,8 @@
 					console.log('err', err);
 				})
 			},
-			editAdmin(){
-				this.$http.httpPut('/admin/'+this.valiFormData.id+'/company/',this.valiFormData).then(res => {
+			async editAdmin(){
+				await this.$http.httpPut('/admin/'+this.valiFormData.id+'/company/',this.valiFormData).then(res => {
 					uni.showModal({
 						content: '基本信息修改成功！',
 						showCancel: false
