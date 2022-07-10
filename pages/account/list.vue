@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-<uni-nav-bar leftWidth="0" rightWidth="180rpx" dark right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft">
+		<uni-nav-bar leftWidth="0" rightWidth="180rpx" dark right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft">
 			<view class="header-logo">
 				<img class="slot-image" src="/static/logo.png"></img>
 			</view>
@@ -14,7 +14,7 @@
 				:extra="item.distance === -1 ? '' : Math.round(item.distance) / 1000 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
-<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
+					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
 					<view class="text">{{getHourType(item.waitTime)}}</view>
 					<text class="uni-h1 color-important">{{getMinute(item.waitTime)}}</text>
 					<view class="text">{{getMinuteType(item.waitTime)}}</view>
