@@ -78,7 +78,7 @@
 					this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
 				} else {
 					uni.showModal({
-						content: `是否${this.data.state === 1 ? '关闭' : '开启'}`,
+						content: `是否${this.data.state === 1 ? '禁用' : '启用'}`,
 						success: (res) => {
 							if (res.confirm) {
 								this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);

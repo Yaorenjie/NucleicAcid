@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-nav-bar dark left-icon="left" right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft" @clickRight="clickRight">
+		<uni-nav-bar dark right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft">
 			<location @change="locationChange"></location>
 		</uni-nav-bar>
 		
