@@ -4,9 +4,6 @@
 			<selectCity @change="cityChange" />
 		</uni-nav-bar>
 		<view class="detection-body">
-			<view class="flex-end">
-				<button size="mini" type="primary" @click="addFile()">批量导入</button>
-			</view>
 			<uni-card v-for="(item, index) in detectionList" :key="index" @click="actionsEdit(item.id)" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
 				:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
@@ -118,7 +115,7 @@
 						this.addCk()
 						break
 					case 1:
-						console.log('导入')
+						this.addFile()
 						break
 					default:
 						break
