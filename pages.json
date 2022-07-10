@@ -1,6 +1,22 @@
 {
 	"pages": [
 		{
+		    "path" : "pages/account/list",
+		    "style" :
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true,
+		    	"app-plus": {
+		    		"titleNView": false,
+		    		"bounce": "none",
+		    		"pullToRefresh": {
+		    			"style": "circle",
+		    			"offset": "70px"
+		    		}
+		    	}
+		    }
+		},
+		{
 		    "path" : "pages/login/login",
 		    "style" :                                                                                    
 		    {
@@ -151,22 +167,6 @@
 		    {
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": false
-		    }
-		},
-		{
-		    "path" : "pages/account/list",
-		    "style" :
-		    {
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": true,
-		    	"app-plus": {
-		    		"titleNView": false,
-		    		"bounce": "none",
-		    		"pullToRefresh": {
-		    			"style": "circle",
-		    			"offset": "70px"
-		    		}
-		    	}
 		    }
 		}
 		,{
