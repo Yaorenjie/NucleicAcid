@@ -109,20 +109,16 @@
 					console.log('表单错误信息：', err);
 				})
 			},
-			loginAjax() {
-				this.$http.httpPost('/login/pwd/', {
+			async loginAjax() {
+				const data = await this.$http.httpPost('/login/pwd/', {
 					username: this.formData.phone,
 					password: this.formData.password
-				}).then((res) => {
-					res.account = this.formData.phone
-					this.$store.commit("UPDATEUSERS", res);
-					this.getPermission()
-					uni.navigateTo({
-					    url: '/pages/person/index'
-					});
 				})
-				.catch((error) => {
-				  console.log(error);
+				data.account = this.formData.phone
+				this.$store.commit("UPDATEUSERS", data);
+				this.getPermission()
+				uni.navigateTo({
+				    url: '/pages/person/index'
 				});
 			},
 			async getPermission() {

@@ -14,8 +14,12 @@
 				:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
-					<text class="uni-h1 color-important">{{item.waitTime}}</text>
-					<view class="text">分钟</view>
+					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
+					<view class="text">{{getHourType(item.waitTime)}}</view>
+					<text class="uni-h1 color-important">{{getMinute(item.waitTime)}}</text>
+					<view class="text">{{getMinuteType(item.waitTime)}}</view>
+					<text class="uni-h1 color-important">{{getTime(item.waitTime)}}</text>
+					<view class="text">{{getTimeType(item.waitTime)}}</view>
 				</view>
 				<view class="uni-body">
 					<view><label>总排队人数：</label><label>{{item.wait}}人</label></view>
@@ -95,6 +99,29 @@
 				this.$set(this.search, 'latitude', item.latitude)
 				this.$set(this.search, 'longitude', item.longitude)
 				this.initData()
+			},
+			getHour(time) {
+				if (time < (60 * 60)) return ''
+				return parseInt(time / 60 / 60 % 24)
+			},
+			getHourType (time) {
+				return time < (60 * 60) ? '' : '小时'
+			},
+			getMinute (time) {
+				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
+				return parseInt(time / 60 % 60)
+			},
+			getMinuteType (time) {
+				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
+				return '分钟'
+			},
+			getTime (time) {
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
+				return time % 60
+			},
+			getTimeType (time) {
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
+				return '秒'
 			}
 		}
 	}
