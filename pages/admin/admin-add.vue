@@ -92,13 +92,18 @@
 				this.getPassword(8)
 				this.$http.httpPost('/admin/',this.valiFormData).then(res => {
 					uni.showModal({
+						title: '温馨提示',
 						content: '添加成功，请记住密码为'+this.valiFormData.password,
-						showCancel: true
-					})
-					uni.navigateTo({
-						url: 'admin',
-						animationType: 'slide-in-left',
-						animationDuration: 200
+						showCancel: false,
+						success: function (res) {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: 'admin',
+									animationType: 'slide-in-left',
+									animationDuration: 200
+								})
+							}
+						}
 					})
 				})
 			}

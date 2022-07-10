@@ -5,7 +5,7 @@
 			<view class="popup-content">
 				<view class="btn-list">
 					<button class="mini-btn" type="default" size="mini" @click="cancal">取消</button>
-					<button class="mini-btn" type="default" size="mini" @click="save">确定</button>
+					<button class="mini-btn" type="primary" size="mini" @click="save">确定</button>
 				</view>
 				<view class="uni-list">
 					<checkbox-group @change="checkboxChange">

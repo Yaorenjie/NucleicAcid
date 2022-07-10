@@ -136,23 +136,23 @@
 				else this.updateAjax()
 			},
 			async addAjax () {
-				const data = await this.$http.httpPost('/admin/point/', {
+				await this.$http.httpPost('/admin/point/',{
 					...this.data,
 					...{
 						province: 0,
 						city: 0,
 						area: 0
-					}
-				})
-				uni.showToast({
-					title: '添加成功',
-					icon: 'none',
-					duration: 2000
-				})
-				uni.navigateTo({
-					url: '/detection/detection',
-					animationType: 'slide-in-right',
-					animationDuration: 200
+					}}).then(res => {
+					uni.showToast({
+						title: '添加成功',
+						icon: 'none',
+						duration: 2000
+					})
+					uni.navigateTo({
+						url: '/pages/detection/detection',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
 				})
 			},
 			validateForm () {

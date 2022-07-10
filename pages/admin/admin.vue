@@ -156,7 +156,7 @@
 		flex-direction: row;
 		justify-content: flex-end;
 		align-items: center;
-		height: 45px;
+		padding: 20rpx 0 40rpx 0;
 		uni-button[size=mini]{
 			margin: 0 10rpx;
 		}

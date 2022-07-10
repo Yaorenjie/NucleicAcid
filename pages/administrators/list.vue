@@ -1,22 +1,24 @@
 <template>
 	<view class="container">
-		<view class="uni-form-item uni-column">
-			<uni-easyinput suffixIcon="search" v-model="search.keyWord" placeholder="请输入姓名/手机号" @confirm="initList" @change="initList" @iconClick="initList"></uni-easyinput>
+		<uni-nav-bar dark left-icon="left" right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft" @clickRight="clickRight">
+			<uni-easyinput suffixIcon="search" v-model="search.keyWord" placeholder="请输入姓名/手机号" @confirm="initList" @change="initList" @iconClick="initList" :styles="styles" :placeholderStyle="placeholderStyle"></uni-easyinput>
+		</uni-nav-bar>
+		<view class="admin-body">
+			<uni-card class="admin-list" :class="item.state===0?'disabled':''" v-for="(item, index) in adminList" :key="index" :title="item.role" :isFull="true">
+				<view class="uni-flex uni-row uni-align-center">
+					<uni-icons type="person" size="24"></uni-icons>
+					<text class="uni-h4 uni-ml5">{{item.name}}</text>
+					<text class="text uni-ml5">{{item.account}}</text>
+				</view>
+				<view slot="actions" class="card-actions">
+					<button class="mini-btn" type="default" size="mini" @click="resetPwd(item)">修改密码</button>
+					<button class="mini-btn" type="default" size="mini" @click="enableCk(item, index)">{{item.state === 1 ? '禁' : '启'}}用</button>
+					<button class="mini-btn" type="default" size="mini" @click="editCk(item)">编辑</button>
+				</view>
+			</uni-card>
 		</view>
-		<button size="mini" class="mini-btn" type="default"  @click="addCk()">新增</button>
-		<uni-card class="card-one" v-for="(item, index) in adminList" :key="index" :title="item.role" :isFull="true">
-			<view class="uni-flex uni-row uni-align-center">
-				<uni-icons type="person" size="24"></uni-icons>
-				<text class="uni-h4 uni-ml5">{{item.name}}</text>
-				<text class="text uni-ml5">{{item.account}}</text>
-			</view>
-			<view slot="actions" class="card-actions">
-				<button class="mini-btn" type="default" size="mini" @click="resetPwd(item)">重置密码</button>
-				<button class="mini-btn" type="default" size="mini" @click="enableCk(item, index)">{{item.state === 1 ? '禁' : '启'}}用</button>
-				<button class="mini-btn" type="default" size="mini" @click="editCk(item)">编辑</button>
-			</view>
-		</uni-card>
-		<uni-load-more :status="status"></uni-load-more>
+		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
+		<uni-fab ref="fab" horizontal="right" vertical="bottom" :pattern="pattern" @fabClick="addCk" />
 	</view>
 </template>
 
@@ -24,62 +26,71 @@
 	export default {
 		data() {
 			return {
-				adminListUrl: "http://hsc.zhaomaomao.net/admin/",
-				adminList: [
-					{
-						company: "公司名称",
-						contractStartAt: "2022-06-28",
-						contractEndAt: "2022-07-01",
-						comment: "备注信息",
-						name: "张三",
-						account: "13588888888",
-					}
-				],
+				adminList: [],
 				status: 'more',
 				search: {
 					page: 1,
 					size: 10,
 					keyword: "",
 				},
-				total: 0
+				totalPage: 0,
+				pattern: {
+					selectedColor: '#0260a2',
+					buttonColor: '#0260a2',
+				},
+				styles: {
+					borderColor: 'transparent',
+					color: '#ffffff'
+				},
+				placeholderStyle: 'color: #ffffff',
+				loadMoreText: "加载中...",
+				showLoadMore: false
 			}
 		},
-		created() {
-			// this.getAdminList()
-		},
-		onLoad() {
-			// uni.startPullDownRefresh()
-		},
 		onShow() {
-			this.detectionList = []
-			this.search.page = 1
-			this.getList()
+			this.initList()
+		},
+		onUnload() {
+			this.totalPage = 0
+			this.adminList = []
+			this.loadMoreText = "加载更多"
+			this.showLoadMore = false
 		},
 		onPullDownRefresh () {
-		    this.detectionList = []
-			this.search.page = 1
-		    this.getList()
-		    setTimeout(() => {
-		      uni.stopPullDownRefresh ()
-		    }, 1000);
+		    this.initList()
 		},
 		onReachBottom(){
-			if(this.detectionList.length < this.total){
-				this.search.page ++
+			if(this.adminList.length < this.totalPage){
+				let _page=this.search.page
+				_page++
+				this.$set(this.search,'page',_page)
 			    this.getList()
+			} else {
+				this.loadMoreText = "没有更多数据了"
 			}
 		},		
 		methods: {
+			clickLeft(){
+				uni.navigateBack()
+			},
+			clickRight(){
+				uni.navigateTo({
+					url: '/pages/person/index',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
 			initList () {
-				this.search.page = 1
+				this.adminList = []
+				this.$set(this.search,'page',1)
 				this.getList()
 			},
 			async getList(){
 				this.status = 'loading';
-				const data = await this.$http.httpGet('/manager/', this.search)
-				this.total = data.total
-				this.adminList = data.data
-				if(this.adminList.length >= this.total) this.status = 'noMore'
+				const res = await this.$http.httpGet('/manager/', this.search)
+				if(res.data)this.adminList.push.apply(this.adminList,res.data)
+				this.totalPage = res.total
+				uni.stopPullDownRefresh()
 			},
 			editCk (item) {
 				uni.navigateTo({
@@ -97,7 +108,7 @@
 			},
 			async resetPwd (item) {
 				uni.navigateTo({
-					url: '/pages/administrators/resetPwd?id=' + item.id,
+					url: '/pages/administrators/password?id=' + item.id,
 					animationType: 'slide-in-right',
 					animationDuration: 200
 				})
@@ -119,16 +130,23 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		overflow: hidden;
+	}
+	.uni-easyinput {
+		width: 100%;
+		display: flex;
+		position: relative;
+		align-items: center;
+	}
+	.admin-body{
+		padding: 0 20rpx;
+	}
+	.admin-list{
+		margin-top: 20rpx !important;
 		padding: 20rpx;
 	}
-	
-	.detection-list{
-		margin-top: 10px !important;
-	}
-	
 	.custom-cover {
 		flex: 1;
 		flex-direction: row;
@@ -155,7 +173,7 @@
 		flex-direction: row;
 		justify-content: flex-end;
 		align-items: center;
-		height: 45px;
+		padding: 20rpx 0 40rpx 0;
 		uni-button[size=mini]{
 			margin: 0 10rpx;
 		}

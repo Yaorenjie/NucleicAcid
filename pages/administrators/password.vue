@@ -1,19 +1,18 @@
 <template>
 	<view>
-		<uni-card :is-shadow="false">
-			<uni-forms ref="valiForm"  :modelValue="form" label-position="top" padding :label-width="200">
-				<uni-forms-item label="请输入新密码" required>
-					<uni-easyinput type="password" v-model="form.pwd" />
-				</uni-forms-item>
-				<uni-forms-item label="请重复输入新密码" required>
-					<uni-easyinput type="password" v-model="form.newPwd" />
-				</uni-forms-item>
-			</uni-forms>
-			<view class="btn-list">
-				<button size="mini" type="primary" @click="cancel()">取消</button>
-				<button size="mini" type="primary" @click="submit('valiForm')">提交</button>	
+		<uni-section title="修改密码" type="line">
+			<view class="uni-edit-form">
+				<uni-forms ref="valiForm"  :modelValue="form" label-position="top" padding :label-width="200">
+					<uni-forms-item label="请输入新密码" required>
+						<uni-easyinput type="password" v-model="form.pwd" />
+					</uni-forms-item>
+					<uni-forms-item label="请重复输入新密码" required>
+						<uni-easyinput type="password" v-model="form.newPwd" />
+					</uni-forms-item>
+				</uni-forms>
+				<button type="primary" @click="submit('valiForm')">提交</button>	
 			</view>
-		</uni-card>
+		</uni-section>
 	</view>
 </template>
 
@@ -34,17 +33,6 @@
 			}
 		},
 		methods: {
-			cancel() {
-				this.form = {
-					pwd: '',
-					newPwd: ''
-				}
-				uni.navigateTo({
-					url: '/pages/administrators/list',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
-			},
 			submit() {
 				this.editAjax()
 			},
@@ -65,7 +53,6 @@
 					icon: 'none',
 					duration: 2000
 				})
-				this.cancel()
 			}
 		}
 	}
