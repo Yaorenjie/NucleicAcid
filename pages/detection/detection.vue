@@ -171,7 +171,7 @@
 					this.$set(this.search, 'city', '')
 					this.$set(this.search, 'area', '')
 				}
-				thi.initData()
+				this.initData()
 			}
 		}
 	}
