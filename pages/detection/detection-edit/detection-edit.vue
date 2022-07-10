@@ -77,21 +77,23 @@
 				if (this.id === '' || this.id === 0) {
 					this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
 				} else {
-					uni.showModal({
-						content: `是否${this.data.state === 1 ? '禁用' : '启用'}`,
-						success: (res) => {
-							if (res.confirm) {
-								this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
-								this.updateAjax()
-							} else {
-								console.log('取消')
-								console.log(e.detail.value)
-								this.$store.commit("update_detectionData_state", e.detail.value ? 0 : 1);
-								console.log(e.detail.value, this.data.state)
-							}
-						}
-					})
+					this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
+					this.editState()
 				}
+			},
+			async editState(){
+				await this.$http.httpPut('/admin/point/'+this.id+'/state/',{
+					state: this.data.state
+				}).then((res) => {
+					uni.showToast({
+						title: '修改成功',
+						icon: 'none',
+						duration: 2000
+					})
+				})
+				.catch((error) => {
+				    console.log(error);
+				});
 			},
 			async updateAjax() {
 				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {

@@ -7,6 +7,9 @@
 				<uni-forms-item label="角色名称" name="label">
 					<uni-easyinput v-model="valiFormData.label" />
 				</uni-forms-item>
+				<uni-forms-item label="角色标识" name="name">
+					<uni-easyinput v-model="valiFormData.name" />
+				</uni-forms-item>
 				<uni-forms-item label="角色权限" name="permission">
 					<checkbox-group @change="checkboxChange">
 						<view v-for="group in permissionList" :key="'role-'+group.value">
@@ -56,23 +59,26 @@
 			}
 		},
 		onLoad(e){
-			this.getPermission()
 			if(e.id){
 				this.$set(this.valiFormData,'id', e.id)
-				this.getRoleInfo(e.id)
+				this.getRoleInfo()
+			} else {
+				this.getPermission()
 			}
 		},
 		methods: {
-			getRoleInfo(id){
-				this.$http.httpGet('/admin/role/'+id+'/').then((res) => {
+			async getRoleInfo(){
+				if(this.valiFormData.id===0) return
+				await this.$http.httpGet('/admin/role/'+this.valiFormData.id+'/').then((res) => {
 					this.valiFormData = res
+					this.getPermission()
 				})
 				.catch((error) => {
 				    console.log(error);
 				});
 			},
-			getPermission(){
-				this.$http.httpGet('/admin/permission/').then((res) => {
+			async getPermission(){
+				await this.$http.httpGet('/admin/permission/').then((res) => {
 					this.resetPermissionList(res)
 				})
 				.catch((error) => {
@@ -108,7 +114,6 @@
 					}
 					if(parseInt(i)===(permissionList.length-1)){
 						this.permissionList=_permissionList
-						console.log('结果',this.permissionList)
 					}
 				}
 				
@@ -125,7 +130,12 @@
 				})
 			},
 			addRole(){
-				this.$http.httpPost('/admin/role/',this.valiFormData).then(res => {
+				this.$http.httpPost('/admin/role/',{
+					name: this.valiFormData.name,
+					label: this.valiFormData.label,
+					state: 1,
+					permission: this.valiFormData.permission
+				}).then(res => {
 					uni.showModal({
 						content: '添加角色成功！',
 						showCancel: false
