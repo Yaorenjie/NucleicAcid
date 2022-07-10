@@ -208,11 +208,11 @@
 				return '分钟'
 			},
 			getTime (time) {
-				if (time % 60 === 0 && time !== 0) return '' 
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return '' 
 				return time % 60
 			},
 			getTimeType (time) {
-				if (time % 60 === 0 && time !== 0) return '' 
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return '' 
 				return '秒'
 			}
 		}
