@@ -40,18 +40,17 @@
 				this.$emit('bindTimeDelete', this.index)
 			},
 			bindTimeChange(e, key) {
-				console.log(e.detail.value)
 				this.times[key] = e.detail.value
 				if (key === 'start') {
 					this.$emit('bindTimeChange', {
 						data: {
-							startAt: e.detail.value + ':00',
+							startAt: e.detail.value,
 							endAt: this.times.endAt
 						},
 						index: this.index
 					})
 				} else {
-					if (!this.compareTime(this.times.startAt, e.detail.value + ':00')) {
+					if (!this.compareTime(this.times.startAt, e.detail.value)) {
 						uni.showToast({
 							title: '结束时间不能比起始时间大',
 							icon: 'none',
@@ -63,7 +62,7 @@
 						this.$emit('bindTimeChange', {
 							data: {
 								startAt: this.times.startAt,
-								endAt: e.detail.value + ':00'
+								endAt: e.detail.value
 							},
 							index: this.index
 						})
@@ -80,8 +79,7 @@
 					var s = "";
 					var hour = time.split(":")[0];
 					var min = time.split(":")[1];
-					var sec = time.split(":")[2];
-					s = Number(hour * 3600) + Number(min * 60) + Number(sec);
+					s = Number(hour * 3600) + Number(min * 60);
 					return s;
 				}
 			}

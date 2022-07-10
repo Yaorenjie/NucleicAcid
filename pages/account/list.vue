@@ -1,38 +1,41 @@
 <template>
 	<view class="container">
-		<uni-nav-bar dark left-icon="left" right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft" @clickRight="clickRight">
-			<location @change="locationChange"></location>
+<uni-nav-bar leftWidth="0" rightWidth="180rpx" dark right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft">
+			<view class="header-logo">
+				<img class="slot-image" src="/static/logo.png"></img>
+			</view>
+			<block slot="right">
+				<location @change="locationChange"></location>
+			</block>
 		</uni-nav-bar>
-		
-		<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
-			:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-			:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
-			<view class="uni-flex uni-row uni-justify-center uni-align-center">
-				<view class="text">预计等待时间</view>
-					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
+		<view class="detection-body">
+			<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
+				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
+				:extra="item.distance === -1 ? '' : (item.distance * 0.001).toFixed(3) + '公里'">
+				<view class="uni-flex uni-row uni-justify-center uni-align-center">
+					<view class="text">预计等待时间</view>
+<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
 					<view class="text">{{getHourType(item.waitTime)}}</view>
 					<text class="uni-h1 color-important">{{getMinute(item.waitTime)}}</text>
 					<view class="text">{{getMinuteType(item.waitTime)}}</view>
 					<text class="uni-h1 color-important">{{getTime(item.waitTime)}}</text>
 					<view class="text">{{getTimeType(item.waitTime)}}</view>
-			</view>
-			<view class="uni-body">
-				<view>总排队人数：{{item.wait}}人</view>
-				<view>检测窗口：{{item.window}}个</view>
-				<view>采样时间：
-					<view v-for="(item1, index1) in item.time">
-						{{item1.startAt}} - {{item1.endAt}}
+				</view>
+				<view class="uni-body">
+					<view><label>总排队人数：</label><label>{{item.wait}}人</label></view>
+					<view>
+						<label>检测窗口：</label><label>{{item.window}}</label>个
+					</view>
+					<view>
+						<label>采样时间：</label>
+						<label v-for="(item1, index1) in item.time">
+							{{item1.startAt}} - {{item1.endAt}}
+						</label>
 					</view>
 				</view>
-			</view>
-			<!-- 			<view slot="actions" class="card-actions">
-				<view class="card-actions-item" @click="actionsEdit(1)">
-					<uni-icons type="compose" size="18" color="#999"></uni-icons>
-					<text class="card-actions-item-text">编辑</text>
-				</view>
-			</view> -->
-		</uni-card>
-		<uni-load-more :status="status"></uni-load-more>
+			</uni-card>
+		</view>
+		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
 	</view>
 </template>
 
@@ -52,69 +55,65 @@
 					latitude: '',
 					longitude: ''
 				},
-				status: 'more',
-				total: 0
+				totalPage: 0,
+				loadMoreText: "加载中...",
+				showLoadMore: false
 			}
 		},
-		onLoad() {
-			// uni.startPullDownRefresh()
-		},
-		onShow() {
+		// onShow() {
+		// 	this.initData()
+		// },
+		onUnload() {
+			this.totalPage = 0
+			this.detectionList = []
+			this.loadMoreText = "加载更多"
+			this.showLoadMore = false
 		},
 		onPullDownRefresh() {
-			this.detectionList = []
-			this.search.page = 1
-			this.getList()
-			setTimeout(() => {
-				uni.stopPullDownRefresh();
-			}, 1000);
+			this.initData()
 		},
 		onReachBottom() {
-			if (this.detectionList.length < this.total) {
-				this.search.page++;
+			if (this.detectionList.length < this.totalPage) {
+				this.showLoadMore = true
+				let _page=this.search.page
+				_page++
+				this.$set(this.search,'page',_page)
 				this.getList()
+			} else {
+				this.loadMoreText = "没有更多数据了"
 			}
 		},
 		methods: {
-			clickLeft(){
-				uni.navigateBack()
-			},
-			clickRight(){
-				uni.navigateTo({
-					url: '/pages/person/index',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
+			initData(){
+				this.detectionList = []
+				this.$set(this.search, 'page', 1)
+				this.getList()
 			},
 			async getList() {
-				this.status = 'loading';
-				const data = await this.$http.httpGet('/api/point/', this.search)
-				this.total = data.total
-				this.detectionList = [
-					...this.detectionList,
-					...data.data
-				]
-				if (this.detectionList.length >= this.total) this.status = 'noMore'
+				const res = await this.$http.httpGet('/api/point/', this.search)
+				this.totalPage = res.total
+				if(res.data)this.detectionList.push.apply(this.detectionList,res.data)
+				uni.stopPullDownRefresh()
 			},
 			locationChange(item) {
 				this.$set(this.search, 'latitude', item.latitude)
 				this.$set(this.search, 'longitude', item.longitude)
-				this.$set(this.search, 'page', 1)
-				this.getList()
+				this.initData()
 			},
 			getHour(time) {
 				if (time < (60 * 60)) return ''
-				return parseInt(time / 60 / 60 % 24)
+				return Math.ceil(time / 60 / 60 % 24)
 			},
 			getHourType (time) {
 				return time < (60 * 60) ? '' : '小时'
 			},
 			getMinute (time) {
-				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
-				return parseInt(time / 60 % 60)
+				console.log(time, Math.ceil(time / 60))
+				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
+				return Math.ceil((time / 60) % 60)
 			},
 			getMinuteType (time) {
-				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
+				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
 				return '分钟'
 			},
 			getTime (time) {
@@ -129,22 +128,36 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.container {
 		overflow: hidden;
 		// padding: 20rpx;
 	}
-
-	.detection-list {
-		margin-top: 10px !important;
+	.uni-navbar__header-btns-right{
+		width: 100px;
 	}
-
+	.header-logo{
+		display: flex;
+		align-items: center;
+		.slot-image{
+			width: auto;
+			height: 26px;
+		}
+	}
+	.uni-navbar__header-container {
+		padding-left: 0;
+	}
+	.detection-body{
+		padding: 0 20rpx !important;
+	}
+	.detection-list {
+		margin-top: 20rpx !important;
+	}
 	.custom-cover {
 		flex: 1;
 		flex-direction: row;
 		position: relative;
 	}
-
 	.cover-content {
 		position: absolute;
 		bottom: 0;
@@ -188,5 +201,13 @@
 
 	.no-border {
 		border-width: 0;
+	}
+	.uni-body{
+		label{
+			padding-right: 5rpx;
+		}
+		uni-view{
+			padding: 10rpx 0;
+		}
 	}
 </style>

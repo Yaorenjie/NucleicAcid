@@ -1,13 +1,8 @@
 <template>
-	<uni-list class="list-box">
-		<uni-list-item title="详细地址" :note="data.address" clickable @click="openLocation">
-			<template v-slot:footer>
-				<view class="card-actions-item">
-					<uni-icons type="location-filled" size="18" color="#999"></uni-icons>
-				</view>
-			</template>
-		</uni-list-item>
-	</uni-list>
+	<view @click="openLocation" class="location">
+		<text class="location-text">{{data.address}}</text>
+		<uni-icons type="location-filled" size="18" color="#ffffff"></uni-icons>
+	</view>
 </template>
 
 <script>
@@ -183,11 +178,18 @@
 </script>
 
 <style lang="scss">
-	.section-box {
-		padding: 0 0 20px 0;
-	}
-
-	.list-box {
-		width: calc(100% - 40px);
+	.location{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		.location-text{
+			width: calc(100% - 18px);
+			word-wrap: break-word; 
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			text-align: left;
+		}
 	}
 </style>

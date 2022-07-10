@@ -33,11 +33,12 @@
 				type: '',
 				// 校验表单数据
 				valiFormData: {
-					id: 0,
-					name: '雅居乐花园',
+					province: 0,
+					city: 0,
+					area: 0,
 					address: '四川省成都市天府新区麓山大道二段19号成都雅居乐花园',
-					lat: 39.9085,
-					long: 116.39747,
+					latitude: '',
+					longitude: ''
 				}
 			}
 		},
@@ -47,10 +48,10 @@
 			}
 		},
 		onLoad(e) {
-			if (e.id) this.valiFormData.id = e.id
-			if (e.address) this.valiFormData.address = e.address
-			if (e.address) this.valiFormData.lat = e.lat
-			if (e.address) this.valiFormData.long = e.long
+			if (e.id) this.id = e.id
+			if (e.address) this.valiFormData.address = e.address || 0
+			if (e.address) this.valiFormData.latitude = e.lat || ''
+			if (e.address) this.valiFormData.longitude = e.long || ''
 		},
 		methods: {
 			togglePopup(type) {
@@ -66,13 +67,13 @@
 				uni.chooseLocation({
 					keyword: this.valiFormData.address,
 					// address: this.valiFormData.address,
-					latitude: this.valiFormData.lat,
-					longitude: this.valiFormData.long,
+					latitude: this.valiFormData.latitude,
+					longitude: this.valiFormData.longitude,
 					// name: this.valiFormData.name,
 					success: (res) => {
 						this.$set(this.valiFormData, 'address', res.address)
-						this.$set(this.valiFormData, 'lat', res.latitude)
-						this.$set(this.valiFormData, 'long', res.longitude)
+						this.$set(this.valiFormData, 'latitude', res.latitude)
+						this.$set(this.valiFormData, 'longitude', res.longitude)
 						console.log(this.valiFormData)
 					}
 				})
@@ -155,7 +156,6 @@
 				})
 			},
 			async checkPermission() {
-				console.log(status)
 				let status = permision.isIOS ? await permision.requestIOS('location') :
 					await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
 				console.log(status)
@@ -204,14 +204,12 @@
 					duration: 2000
 				})
 				this.$store.commit("update_detectionData_address", this.valiFormData)
-				this.cancel()
+				setTimeout(() => {
+					this.cancel()
+				}, 2000)
 			},
 			cancel () {
-				uni.navigateTo({
-					url: '/pages/detection/detection-edit/detection-edit',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
+				uni.navigateBack()
 			}
 		}
 	}
