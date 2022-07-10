@@ -22,7 +22,7 @@
 					<view>
 						<label>采样时间：</label>
 						<label v-for="(item1, index1) in item.time">
-							{{item1.startAt}} - {{item1.endAt}}
+							{{$utils.getHourMin(item1.startAt)}} - {{$utils.getHourMin(item1.endAt)}}
 						</label>
 					</view>
 				</view>

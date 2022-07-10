@@ -78,7 +78,7 @@
 				return false
 			},
 			submit() {
-				if (this.id === '') {
+				if (this.id === '' || this.id === '0') {
 					this.$store.commit("update_detectionData_time", this.times);
 					this.cancel()
 				} else  this.updateAjax()

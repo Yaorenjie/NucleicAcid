@@ -40,7 +40,7 @@
 		},
 		methods: {
 			submit() {
-				if (this.id === '') {
+				if (this.id === '' || this.id === '0') {
 					this.$store.commit("update_detectionData_wait", this.valiFormData.wait);
 					this.cancel()
 				} else  this.updateAjax()

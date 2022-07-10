@@ -36,7 +36,7 @@
 					province: 0,
 					city: 0,
 					area: 0,
-					address: '四川省成都市天府新区麓山大道二段19号成都雅居乐花园',
+					address: '',
 					latitude: '',
 					longitude: ''
 				}
@@ -74,7 +74,6 @@
 						this.$set(this.valiFormData, 'address', res.address)
 						this.$set(this.valiFormData, 'latitude', res.latitude)
 						this.$set(this.valiFormData, 'longitude', res.longitude)
-						console.log(this.valiFormData)
 					}
 				})
 			},
@@ -189,7 +188,16 @@
 				this.hasLocation = false
 			},
 			submit() {
-				if (this.id === '') {
+				if (this.valiFormData.addres === '') {
+					uni.showToast({
+						title: '详细地址不能为空',
+						icon: 'none',
+						duration: 2000
+					})
+					return
+				}
+				if (this.id === '' || this.id === '0') {
+					console.log(this.valiFormData, 'this.valiFormData')
 					this.$store.commit("update_detectionData_address", this.valiFormData)
 					this.cancel()
 				} else  this.updateAjax()

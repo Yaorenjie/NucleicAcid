@@ -62,8 +62,8 @@ const store = new Vuex.Store({
 		},
 		update_detectionData_address(state, data){
 			state.detectionData.address = data.address;
-			state.detectionData.latitude = data.lat;
-			state.detectionData.longitude = data.long;
+			state.detectionData.latitude = data.latitude;
+			state.detectionData.longitude = data.longitude;
 			storage.setJson("detectionData", state.detectionData);
 		},
 		update_detectionData_window(state, data){

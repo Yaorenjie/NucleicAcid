@@ -3,12 +3,12 @@
 		<view class="row">
 			<picker mode="time" :value="times.startAt"
 				@change="bindTimeChange($event, 'start')">
-				<view class="uni-input">{{times.startAt}}</view>
+				<view class="uni-input">{{$utils.getHourMin(times.startAt)}}</view>
 			</picker>
 			<span>-</span>
 			<picker mode="time" :value="times.endAt"
 				@change="bindTimeChange($event, 'end')">
-				<view class="uni-input">{{times.endAt}}</view>
+				<view class="uni-input">{{$utils.getHourMin(times.endAt)}}</view>
 			</picker>
 		</view>
 		<view class="card-actions-item" @click="deleteCk">
@@ -40,17 +40,18 @@
 				this.$emit('bindTimeDelete', this.index)
 			},
 			bindTimeChange(e, key) {
+				console.log(e.detail.value)
 				this.times[key] = e.detail.value
 				if (key === 'start') {
 					this.$emit('bindTimeChange', {
 						data: {
-							startAt: e.detail.value,
+							startAt: e.detail.value + ':00',
 							endAt: this.times.endAt
 						},
 						index: this.index
 					})
 				} else {
-					if (!this.compareTime(this.times.startAt, e.detail.value)) {
+					if (!this.compareTime(this.times.startAt, e.detail.value + ':00')) {
 						uni.showToast({
 							title: '结束时间不能比起始时间大',
 							icon: 'none',
@@ -62,7 +63,7 @@
 						this.$emit('bindTimeChange', {
 							data: {
 								startAt: this.times.startAt,
-								endAt: e.detail.value
+								endAt: e.detail.value + ':00'
 							},
 							index: this.index
 						})
@@ -79,7 +80,8 @@
 					var s = "";
 					var hour = time.split(":")[0];
 					var min = time.split(":")[1];
-					s = Number(hour * 3600) + Number(min * 60);
+					var sec = time.split(":")[2];
+					s = Number(hour * 3600) + Number(min * 60) + Number(sec);
 					return s;
 				}
 			}

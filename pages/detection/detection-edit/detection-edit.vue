@@ -7,8 +7,8 @@
 				<uni-list-item showArrow title="工作时间" clickable @click="actionsTime">
 					<template v-slot:footer>
 						<view class="time-list">
-							<view class="time-one" v-for="(item, index) in data.time" :key="index">{{item.startAt}} -
-								{{item.endAt}}</view>
+							<view class="time-one" v-for="(item, index) in data.time" :key="index">{{$utils.getHourMin(item.startAt)}} -
+								{{$utils.getHourMin(item.endAt)}}</view>
 						</view>
 					</template>
 				</uni-list-item>
@@ -165,11 +165,13 @@
 						icon: 'none',
 						duration: 2000
 					})
-					uni.navigateTo({
-						url: '/pages/detection/detection',
-						animationType: 'slide-in-left',
-						animationDuration: 200
-					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/detection/detection',
+							animationType: 'slide-in-left',
+							animationDuration: 200
+						})	
+					}, 2000)
 				})
 			},
 			validateForm() {
