@@ -1,8 +1,11 @@
 <template>
 	<view class="container">
 		<uni-section title="管理中心" type="line">
-			<uni-list>
+			<uni-list v-if="list.length>0">
 				<uni-list-item v-for="(item,index) in list" :key="index" showArrow :title="item.label" clickable @click="urlCk(item.path)"/>
+			</uni-list>
+			<uni-list v-else>
+				<uni-list-item v-for="(item,index) in permisson" :key="index" showArrow :title="item.label" clickable @click="urlCk(item.path)"/>
 			</uni-list>
 		</uni-section>
 		<uni-section title="基本信息" type="line">
@@ -19,28 +22,20 @@
 	export default {
 		data() {
 			return {
-				// list: [
-				// 	{
-				// 		name: "用户管理",
-				// 		path: "/pages/admin/admin"
-				// 	},
-				// 	{
-				// 		name: "角色管理",
-				// 		path: "/pages/role/role"
-				// 	},
-				// 	{
-				// 		name: "权限管理",
-				// 		path: "/pages/permission/permission"
-				// 	},
-				// 	{
-				// 		name: "管理员管理",
-				// 		path: "/pages/administrators/list"
-				// 	},
-				// 	{
-				// 		name: "采样点管理",
-				// 		path: "/pages/detection/detection"
-				// 	},
-				// ],
+				permisson: [
+					{
+						label: "用户管理",
+						path: "/pages/admin/admin"
+					},
+					{
+						label: "角色管理",
+						path: "/pages/role/role"
+					},
+					{
+						label: "权限管理",
+						path: "/pages/permission/permission"
+					}
+				],
 				loading: false
 			}
 		},

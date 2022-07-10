@@ -16,7 +16,6 @@
 				<uni-list-item showArrow title="总排队人数" :rightText="data.wait ? `${data.wait}个` : ''" clickable @click="actionsWait" />
 				<uni-list-item title="是否启用">
 					<template v-slot:footer>
-						{{data.state === 1 ? true : false}}
 						<switch :checked="data.state === 1 ? true : false" @change="actionsEnable" />
 					</template>
 				</uni-list-item>
