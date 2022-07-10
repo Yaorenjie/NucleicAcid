@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<uni-section title="编辑检测点名称" type="line">
+		<uni-section title="编辑详细地址" type="line">
 			<view class="uni-edit-form">
 				<uni-forms ref="valiForm" :modelValue="valiFormData">
-					<uni-list-item title="详细地址" :note="valiFormData.address" clickable @click="openLocation">
+					<uni-list-item :note="valiFormData.address" clickable @click="openLocation">
 						<template v-slot:footer>
 							<view class="card-actions-item">
 								<uni-icons type="location-filled" size="18" color="#999"></uni-icons>
