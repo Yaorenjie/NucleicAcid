@@ -13,8 +13,6 @@
 					<view class="text">{{getHourType(item.waitTime)}}</view>
 					<text class="uni-h1 color-important">{{getMinute(item.waitTime)}}</text>
 					<view class="text">{{getMinuteType(item.waitTime)}}</view>
-					<text class="uni-h1 color-important">{{getTime(item.waitTime)}}</text>
-					<view class="text">{{getTimeType(item.waitTime)}}</view>
 				</view>
 				<view class="uni-body">
 					<view><label>总排队人数：</label><label>{{item.wait}}人</label></view>
@@ -200,22 +198,13 @@
 				return time < (60 * 60) ? '' : '小时'
 			},
 			getMinute (time) {
-				console.log(time, Math.ceil(time / 60))
-				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0) return ''
 				return Math.ceil((time / 60) % 60)
 			},
 			getMinuteType (time) {
-				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0) return ''
 				return '分钟'
 			},
-			getTime (time) {
-				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
-				return time % 60
-			},
-			getTimeType (time) {
-				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
-				return '秒'
-			}
 		}
 	}
 </script>
