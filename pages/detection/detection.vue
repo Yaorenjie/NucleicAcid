@@ -6,7 +6,7 @@
 		<view class="detection-body">
 			<uni-card v-for="(item, index) in detectionList" :key="index" @click="actionsEdit(item.id)" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-				:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
+				:extra="item.distance === -1 ? '' : (item.distance * 0.001).toFixed(3) + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
 					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
@@ -194,25 +194,26 @@
 			},			
 			getHour(time) {
 				if (time < (60 * 60)) return ''
-				return parseInt(time / 60 / 60 % 24)
+				return Math.ceil(time / 60 / 60 % 24)
 			},
 			getHourType (time) {
 				return time < (60 * 60) ? '' : '小时'
 			},
 			getMinute (time) {
-				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
-				return parseInt(time / 60 % 60)
+				console.log(time, Math.ceil(time / 60))
+				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
+				return Math.ceil((time / 60) % 60)
 			},
 			getMinuteType (time) {
-				if (time < 60 || parseInt(time / 60 % 60) === 0) return ''
+				if (time < 60 || Math.ceil(time / 60 % 60) === 0) return ''
 				return '分钟'
 			},
 			getTime (time) {
-				if ((time % 60 === 0 && time !== 0) || time >= 60) return '' 
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
 				return time % 60
 			},
 			getTimeType (time) {
-				if ((time % 60 === 0 && time !== 0) || time >= 60) return '' 
+				if ((time % 60 === 0 && time !== 0) || time >= 60) return ''
 				return '秒'
 			}
 		}

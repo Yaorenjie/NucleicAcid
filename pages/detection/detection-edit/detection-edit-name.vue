@@ -61,7 +61,7 @@
 			},
 			async updateAjax() {
 				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
-					...this.valiFormData
+					name: this.valiFormData.name
 				})
 				uni.showToast({
 					title: '修改成功',
@@ -69,10 +69,12 @@
 					duration: 2000
 				})
 				this.$store.commit("update_detectionData_name", this.valiFormData.name)
-				this.cancel()
+				setTimeout(() => {
+					this.cancel()
+				}, 2000)
 			},
 			cancel () {
-				uni.navigateBack();
+				uni.navigateBack()
 			}
 		}
 	}

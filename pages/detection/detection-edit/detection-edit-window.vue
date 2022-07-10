@@ -50,7 +50,7 @@
 			},
 			async updateAjax() {
 				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
-					...this.valiFormData
+					window: this.valiFormData.window
 				})
 				uni.showToast({
 					title: '修改成功',
@@ -58,14 +58,12 @@
 					duration: 2000
 				})
 				this.$store.commit("update_detectionData_window", this.valiFormData.window);
-				this.cancel()
+				setTimeout(() => {
+					this.cancel()
+				}, 2000)
 			},
 			cancel() {
-				uni.navigateTo({
-					url: '/pages/detection/detection-edit/detection-edit',
-					animationType: 'slide-in-right',
-					animationDuration: 200
-				})
+				uni.navigateBack()
 			}
 		}
 	}
