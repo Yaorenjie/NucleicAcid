@@ -40,11 +40,25 @@
 		methods: {
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
-					this.$store.commit("update_detectionData_window", this.valiFormData.window);
-					this.cancel()
+					if (this.id === '') {
+						this.$store.commit("update_detectionData_window", this.valiFormData.window);
+						this.cancel()
+					} else  this.updateAjax()
 				}).catch(err => {
 					console.log('err', err);
 				})
+			},
+			async updateAjax() {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+					...this.valiFormData
+				})
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					duration: 2000
+				})
+				this.$store.commit("update_detectionData_window", this.valiFormData.window);
+				this.cancel()
 			},
 			cancel() {
 				uni.navigateTo({

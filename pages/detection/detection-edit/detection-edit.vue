@@ -16,6 +16,7 @@
 				<uni-list-item showArrow title="总排队人数" :rightText="data.wait ? `${data.wait}个` : ''" clickable @click="actionsWait" />
 				<uni-list-item title="是否启用">
 					<template v-slot:footer>
+						{{data.state === 1 ? true : false}}
 						<switch :checked="data.state === 1 ? true : false" @change="actionsEnable" />
 					</template>
 				</uni-list-item>
@@ -58,7 +59,34 @@
 				this.$store.commit("update_detectionData", data)
 			},
 			actionsEnable(e){
-				this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
+			   if (this.id === '' || this.id === 0) {
+				   this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
+			   } else {
+				   uni.showModal({
+				   	content: `是否${this.data.state === 1 ? '关闭' : '开启'}`,
+				   	success: (res) => {
+				   		if (res.confirm) {
+				   			this.$store.commit("update_detectionData_state", e.detail.value ? 1 : 0);
+				   			this.updateAjax()
+				   		} else {
+							console.log('取消')
+				   			console.log(e.detail.value)
+				   			this.$store.commit("update_detectionData_state", e.detail.value ? 0 : 1);
+				   			console.log(e.detail.value, this.data.state)
+				   		}
+				   	}
+				   })
+			   }	   
+			},
+			async updateAjax() {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+					...this.data
+				})
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					duration: 2000
+				})
 			},
 			actionsName(){
 				uni.navigateTo({
@@ -106,7 +134,6 @@
 				if (this.validateForm()) return
  				if (this.id === 0 || this.id === '') this.addAjax()
 				else this.updateAjax()
-				
 			},
 			async addAjax () {
 				const data = await this.$http.httpPost('/admin/point/', {
@@ -126,16 +153,6 @@
 					url: '/detection/detection',
 					animationType: 'slide-in-right',
 					animationDuration: 200
-				})
-			},
-			async updateAjax() {
-				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
-					...this.data
-				})
-				uni.showToast({
-					title: '修改成功',
-					icon: 'none',
-					duration: 2000
 				})
 			},
 			validateForm () {

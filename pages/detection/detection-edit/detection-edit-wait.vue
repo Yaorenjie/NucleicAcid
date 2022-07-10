@@ -40,6 +40,20 @@
 		},
 		methods: {
 			submit() {
+				if (this.id === '') {
+					this.$store.commit("update_detectionData_wait", this.valiFormData.wait);
+					this.cancel()
+				} else  this.updateAjax()
+			},
+			async updateAjax() {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+					...this.valiFormData
+				})
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					duration: 2000
+				})
 				this.$store.commit("update_detectionData_wait", this.valiFormData.wait);
 				this.cancel()
 			},

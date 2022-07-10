@@ -2,7 +2,7 @@
 	<view class="container">
 		<uni-section title="管理中心" type="line">
 			<uni-list>
-				<uni-list-item v-for="(item,index) in list" :key="index" showArrow :title="item.name" clickable @click="urlCk(item.path)"/>
+				<uni-list-item v-for="(item,index) in list" :key="index" showArrow :title="item.label" clickable @click="urlCk(item.path)"/>
 			</uni-list>
 		</uni-section>
 		<uni-section title="基本信息" type="line">
@@ -19,28 +19,28 @@
 	export default {
 		data() {
 			return {
-				list: [
-					{
-						name: "用户管理",
-						path: "/pages/admin/admin"
-					},
-					{
-						name: "角色管理",
-						path: "/pages/role/role"
-					},
-					{
-						name: "权限管理",
-						path: "/pages/permission/permission"
-					},
-					{
-						name: "管理员管理",
-						path: "/pages/administrators/list"
-					},
-					{
-						name: "采样点管理",
-						path: "/pages/detection/detection"
-					},
-				],
+				// list: [
+				// 	{
+				// 		name: "用户管理",
+				// 		path: "/pages/admin/admin"
+				// 	},
+				// 	{
+				// 		name: "角色管理",
+				// 		path: "/pages/role/role"
+				// 	},
+				// 	{
+				// 		name: "权限管理",
+				// 		path: "/pages/permission/permission"
+				// 	},
+				// 	{
+				// 		name: "管理员管理",
+				// 		path: "/pages/administrators/list"
+				// 	},
+				// 	{
+				// 		name: "采样点管理",
+				// 		path: "/pages/detection/detection"
+				// 	},
+				// ],
 				loading: false
 			}
 		},
@@ -48,9 +48,9 @@
 			user() {
 				return this.$store.state.users
 			},
-			// list() {
-			// 	return this.$store.state.permission
-			// }
+			list() {
+				return this.$store.state.permission
+			}
 		},
 		// onLoad(){
 		// 	this.list = this.$store.state.permission

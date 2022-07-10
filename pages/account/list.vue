@@ -1,9 +1,12 @@
 <template>
 	<view class="container">
-		<location @change="locationChange"></location>
+		<uni-nav-bar dark left-icon="left" right-icon="more-filled" background-color="#0260a2" @clickLeft="clickLeft" @clickRight="clickRight">
+			<location @change="locationChange"></location>
+		</uni-nav-bar>
+		
 		<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
 			:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-			:extra="item.distance === -1 ? '' : item.distance + '公里'">
+			:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
 			<view class="uni-flex uni-row uni-justify-center uni-align-center">
 				<view class="text">预计等待时间</view>
 				<text class="uni-h1 color-important">{{item.waitTime}}</text>
@@ -69,10 +72,19 @@
 			}
 		},
 		methods: {
+			clickLeft(){
+				uni.navigateBack()
+			},
+			clickRight(){
+				uni.navigateTo({
+					url: '/pages/person/index',
+					animationType: 'slide-in-right',
+					animationDuration: 200
+				})
+			},
 			async getList() {
 				this.status = 'loading';
 				const data = await this.$http.httpGet('/api/point/', this.search)
-				console.log(data)
 				this.total = data.total
 				this.detectionList = [
 					...this.detectionList,
@@ -93,7 +105,7 @@
 <style lang="scss">
 	.container {
 		overflow: hidden;
-		padding: 20rpx;
+		// padding: 20rpx;
 	}
 
 	.detection-list {

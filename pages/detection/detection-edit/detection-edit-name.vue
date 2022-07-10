@@ -51,12 +51,25 @@
 		methods: {
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
-					console.log(this.valiFormData.name)
-					this.$store.commit("update_detectionData_name", this.valiFormData.name);
-					this.cancel()
+					if (this.id === '') {
+						this.$store.commit("update_detectionData_name", this.valiFormData.name)
+						this.cancel()
+					} else  this.updateAjax()
 				}).catch(err => {
 					console.log('err', err);
 				})
+			},
+			async updateAjax() {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+					...this.valiFormData
+				})
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					duration: 2000
+				})
+				this.$store.commit("update_detectionData_name", this.valiFormData.name)
+				this.cancel()
 			},
 			cancel () {
 				uni.navigateBack();

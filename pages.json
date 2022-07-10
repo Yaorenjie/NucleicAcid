@@ -139,10 +139,18 @@
 		},
 		{
 		    "path" : "pages/account/list",
-		    "style" :                                                                                    
+		    "style" :
 		    {
 		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": true
+		        "enablePullDownRefresh": true,
+		    	"app-plus": {
+		    		"titleNView": false,
+		    		"bounce": "none",
+		    		"pullToRefresh": {
+		    			"style": "circle",
+		    			"offset": "70px"
+		    		}
+		    	}
 		    }
 		}
 		,{

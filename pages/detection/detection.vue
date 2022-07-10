@@ -4,9 +4,12 @@
 			<selectCity @change="cityChange" />
 		</uni-nav-bar>
 		<view class="detection-body">
+			<view class="flex-end">
+				<button size="mini" type="primary" @click="addFile()">批量导入</button>
+			</view>
 			<uni-card v-for="(item, index) in detectionList" :key="index" @click="actionsEdit(item.id)" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-				:extra="item.distance === -1 ? '' : item.distance + '公里'">
+				:extra="item.distance === -1 ? '' : item.distance * 0.001 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
 					<text class="uni-h1 color-important">{{item.waitTime}}</text>
@@ -167,6 +170,21 @@
 					this.$set(this.search, 'area', '')
 				}
 				thi.initData()
+			},
+			addFile () {
+				uni.chooseFile({
+					count: 1,
+					extension:['.xls','.xlsx'],
+					success: (res) => {
+						this.ipt(res.tempFilePaths[0])
+						console.log(JSON.stringify(res.tempFilePaths))
+					}
+				})
+			},
+			async ipt (file) {
+				const res = await this.$http.httpPost('/admin/point_ipt/', {
+					file: file
+				})
 			}
 		}
 	}
