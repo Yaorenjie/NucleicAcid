@@ -203,7 +203,7 @@
 				} else  this.updateAjax()
 			},
 			async updateAjax() {
-				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/address/', {
 					...this.valiFormData
 				})
 				uni.showToast({

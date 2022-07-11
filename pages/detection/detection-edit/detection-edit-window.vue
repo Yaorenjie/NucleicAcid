@@ -49,7 +49,7 @@
 				})
 			},
 			async updateAjax() {
-				const data = await this.$http.httpPut('/admin/point/' + this.id + '/', {
+				const data = await this.$http.httpPut('/admin/point/' + this.id + '/window/', {
 					window: this.valiFormData.window
 				})
 				uni.showToast({
