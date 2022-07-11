@@ -11,9 +11,9 @@ export function httpGet(url, params) {
   });
 }
 
-export function httpPost(url, params) {
+export function httpPost(url, params, contentType) {
   return new Promise((resolve, reject)=>{
-      request.post(url, params).then((result)=>{
+      request.post(url, params, contentType).then((result)=>{
           resolve(result)
       }).catch(err=>{
           reject(err)
