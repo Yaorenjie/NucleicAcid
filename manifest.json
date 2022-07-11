@@ -58,6 +58,11 @@
                     "key" : "TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU"
                 }
             }
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
         }
     }
 }

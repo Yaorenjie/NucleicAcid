@@ -1567,3 +1567,8 @@ uni-button[type=primary]{
 		color: #fff;
 	}
 }
+.uni-body {
+	.container,.uni-navbar{
+		padding: 0;
+	}
+}
