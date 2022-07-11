@@ -35,7 +35,9 @@ export default {
 		// if ('POST' === options.method) {
 		// 	options.header = {'Content-Type': 'application/x-www-form-urlencoded'}
 		// }
-        
+        if (options.contentType) {
+			options.header = {'Content-Type': options.contentType}
+		}
         // 发起Promise请求
 		return new Promise((resolve, reject) =>{
 			uni.request(options).then(data=>{
@@ -72,11 +74,12 @@ export default {
 			data: data
 		});
 	},
-	post(url="",data={}){
+	post(url="",data={},contentType){
 		return this.send({
 			url: url,
 			data: data,
-			method: "POST"
+			method: "POST",
+			contentType: contentType
 		});
 	},
 	put(url="",data={}){

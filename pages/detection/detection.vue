@@ -35,6 +35,7 @@
 
 <script>
 	import selectCity from '@/components/select/city.vue'
+	import config from "@/config"
 	export default {
 		components: {
 			selectCity
@@ -98,6 +99,11 @@
 				this.loadMoreText = "没有更多数据了"
 			}
 		},
+		computed: {
+			user() {
+				return this.$store.state.users
+			}
+		},
 		methods: {
 			clickLeft(){
 				uni.navigateBack()
@@ -110,7 +116,6 @@
 				})
 			},
 			trigger(e) {
-				console.log(e)
 				this.content[e.index].active = !e.item.active
 				switch(e.index){
 					case 0:
@@ -181,14 +186,34 @@
 					extension:['.xls','.xlsx'],
 					success: (res) => {
 						this.ipt(res.tempFilePaths[0])
-						console.log(JSON.stringify(res.tempFilePaths))
 					}
 				})
 			},
 			async ipt (file) {
-				const res = await this.$http.httpPost('/admin/point_ipt/', {
-					file: file
-				})
+				// const res = await this.$http.httpPost('/admin/point_ipt/', {
+				// 	file: file
+				// }, 'multipart/form-data')
+				uni.uploadFile({
+				        url: config.uni_app_web_api_url + '/admin/point_ipt/', 
+				        filePath: file,
+				        header:{
+				            "Authorization": this.user.token,
+				            // 'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryHEdN1AIjcdUkAaXM'
+				        },
+						formData: {
+						    "Authorization": this.user.token
+						},
+				        success: (uploadFileRes) => {
+							console.log(uploadFileRes)
+				         },
+				         fail:(err) =>{
+							 uni.showToast({
+							 	title: '上传失败',
+							 	icon: 'none',
+							 	duration: 2000
+							 })
+				         }
+				    })
 			},			
 			getHour(time) {
 				if (time < (60 * 60)) return ''
