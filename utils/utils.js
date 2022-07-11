@@ -158,3 +158,15 @@ function parseUrl(url,params){
 	
 	return string;
 }
+
+export const getHourMin = (time) => {
+	if (time) {
+		if (time.split(":").length > 2) {
+			var s = ""
+			var hour = time.split(":")[0]
+			var min = time.split(":")[1]
+			var sec = time.split(":")[2]
+			return hour + ':' + min
+		} else return time
+	} else return ''
+}

@@ -51,7 +51,7 @@
 		methods: {
 			submit(ref) {
 				this.$refs[ref].validate().then(res => {
-					if (this.id === '') {
+					if (this.id === '' || this.id === '0') {
 						this.$store.commit("update_detectionData_name", this.valiFormData.name)
 						this.cancel()
 					} else  this.updateAjax()
