@@ -47,15 +47,18 @@
 				return this.$store.state.permission
 			}
 		},
-		// onLoad(){
-		// 	this.list = this.$store.state.permission
-		// 	console.log(this.list)
-		// },
+		onShow(){
+			this.getPermission()
+		},
 		methods: {
 			urlCk (url) {
 				uni.navigateTo({
 				    url: url	
 				})
+			},
+			async getPermission() {
+				const data = await this.$http.httpGet('/permission/')
+				this.$store.commit("UPDATEPERMISSION", data);
 			},
 			logOut() {
 				if (this.loading) return
