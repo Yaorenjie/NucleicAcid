@@ -45,13 +45,19 @@
 					})
 					return
 				}
-				const data = await this.$http.httpPost('/manager/' + this.id + '/pwd/', {
+				this.$http.httpPost('/manager/' + this.id + '/pwd/',{
 					newPwd: this.form.newPwd
-				})
-				uni.showToast({
-					title: '密码修改成功',
-					icon: 'none',
-					duration: 2000
+				}).then((res) => {
+					uni.showToast({
+						title: '密码修改成功',
+						icon: 'none',
+						duration: 2000
+					})
+					uni.navigateTo({
+						url: 'list',
+						animationType: 'slide-in-left',
+						animationDuration: 200
+					})
 				})
 			}
 		}
