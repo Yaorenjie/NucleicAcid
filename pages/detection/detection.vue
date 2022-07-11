@@ -197,20 +197,26 @@
 				        url: config.uni_app_web_api_url + '/admin/point_ipt/', 
 				        filePath: file,
 				        header:{
-				            "Authorization": this.user.token,
+				            "Authentication": this.user.token,
 				            // 'content-type': 'multipart/form-data; boundary=----WebKitFormBoundaryHEdN1AIjcdUkAaXM'
 				        },
-						formData: {
-						    "Authorization": this.user.token
-						},
 				        success: (uploadFileRes) => {
-							console.log(uploadFileRes)
-							this.initData()
-							uni.showToast({
-								title: '上传成功',
-								icon: 'none',
-								duration: 2000
-							})
+							let obj = JSON.parse(uploadFileRes.data)
+							console.log(obj)
+							if (obj.code !== 200) {
+								uni.showToast({
+									title: obj.msg,
+									icon: 'none',
+									duration: 2000
+								})
+							} else {
+								this.initData()
+								uni.showToast({
+									title: '上传成功',
+									icon: 'none',
+									duration: 2000
+								})
+							}
 				         },
 				         fail:(err) =>{
 							 uni.showToast({
