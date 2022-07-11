@@ -205,6 +205,12 @@
 						},
 				        success: (uploadFileRes) => {
 							console.log(uploadFileRes)
+							this.initData()
+							uni.showToast({
+								title: '上传成功',
+								icon: 'none',
+								duration: 2000
+							})
 				         },
 				         fail:(err) =>{
 							 uni.showToast({
