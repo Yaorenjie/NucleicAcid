@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>驾车路线规划</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=Q47BZ-KD6WU-WGRVH-BVJKL-ENWXE-AKBQK&libraries=service"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #mapContainer {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<script>
+var startLat;
+var startLong;
+var endLat;
+var endLong;
+var endName;
+var centerLat='39.984104';
+var centerLong='116.307503';
+var map;
+function getQuery(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = decodeURI(window.location.search).substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
+function getCenterLonLat() {
+	startLat=getQuery('startLat')
+	startLong=getQuery('startLong')
+	endLat=getQuery('endLat')
+	endLong=getQuery('endLong')
+	endName=getQuery('endName')
+    let aLon = 0, aLat = 0;
+    let bLon = Number(startLong) - Number(endLong);
+    let bLat = Number(startLat) - Number(endLat);
+    //Math.abs()绝对值
+    if( bLon > 0){
+        aLon = Number(startLong) - Math.abs(bLon) / 2;
+    }else{
+        aLon = Number(endLong) - Math.abs(bLon) / 2;
+    }
+    if( bLat > 0){
+        aLat = Number(startLat) - Math.abs(bLat) / 2;
+    }else{
+        aLat = Number(endLat) - Math.abs(bLat) / 2;
+    }
+	centerLat = aLat;
+	centerLong = aLon;
+}
+getCenterLonLat()
+console.log(startLat,startLong,endLat,endLong,centerLat,centerLong)
+function initMap() {
+  map = new TMap.Map('mapContainer', {
+    center: new TMap.LatLng(centerLat, centerLong),
+    zoom: 14,
+  });
+  var startPosition = new TMap.LatLng(39.984039, 116.307630307503); // 路线规划起点
+  var endPosition = new TMap.LatLng(39.977263, 116.337063); // 路线规划终点
+  var marker = new TMap.MultiMarker({
+    // 创造MultiMarker显示起终点标记
+    id: 'marker-layer',
+    map: map,
+    styles: {
+      start: new TMap.MarkerStyle({
+        width: 25,
+        height: 37,
+        anchor: { x: 16, y: 32 },
+        src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/start.png',
+      }),
+      end: new TMap.MarkerStyle({
+        width: 25,
+        height: 37,
+        anchor: { x: 16, y: 32 },
+        src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
+      }),
+    },
+    geometries: [
+      {
+        id: 'start',
+        styleId: 'start',
+        position: startPosition,
+      },
+      {
+        id: 'end',
+        styleId: 'end',
+        position: endPosition,
+      },
+    ],
+  });
+
+  var driving = new TMap.service.Driving({
+    // 新建一个驾车路线规划类
+    mp: true, // 是否返回多方案
+    policy: 'PICKUP,NAV_POINT_FIRST', // 规划策略
+  });
+  driving.search({ from: startPosition, to: endPosition }).then((result) => {
+    // 搜索路径
+    displayPolyline(result.result.routes[0].polyline); // 绘制路径折线
+  });
+}
+
+function displayPolyline(pl) {
+  // 创建 MultiPolyline显示路径折线
+  var polylineLayer = new TMap.MultiPolyline({
+    id: 'polyline-layer',
+    map: map,
+    styles: {
+      style_blue: new TMap.PolylineStyle({
+        color: '#3777FF',
+        width: 8,
+        borderWidth: 5,
+        borderColor: '#FFF',
+        lineCap: 'round',
+      }),
+    },
+    geometries: [
+      {
+        id: 'pl_1',
+        styleId: 'style_blue',
+        paths: pl,
+      },
+    ],
+  });
+}
+</script>
+
+<body onload="initMap()">
+    <div id="mapContainer"></div>
+</body>
+
+</html>

@@ -74,6 +74,7 @@
 			doGetLocation() {
 				uni.getLocation({
 					geocode: true,
+					type: 'gcj02',
 					success: (res) => {
 						this.hasLocation = true;
 						this.$emit('change', {
