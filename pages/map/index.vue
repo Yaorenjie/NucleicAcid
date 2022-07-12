@@ -3,6 +3,7 @@
 	<web-view :src="url"></web-view>
 	<view class="btn" @click="markertap">
 		<img src="/static/navigation.png" />
+		开始导航
 	</view>
 </view>
 </template>
@@ -85,15 +86,18 @@
 		z-index: 10;
 		border-radius: 45px;
 		box-shadow: 0 1px 8px 1px rgab(165,165,165, 0.2);
-		right: calc(15px + var(--window-right));
+		left: 40px;
+		right: 40px;
 		bottom: calc(30px + var(--window-bottom));
 		z-index: 100;
-		width: 55px;
-		height: 55px;
 		background-color: rgb(2, 96, 162);
+		font-size: 14px;
+		color: #fff;
+		padding: 10px 0;
 		img {
-			width: 32px;
-			height: 30px;
+			width: 20px;
+			height: 20px;
+			margin-right: 5px;
 		}
 	}
 </style>
