@@ -6,7 +6,7 @@
 		<view class="detection-body">
 			<uni-card v-for="(item, index) in detectionList" :key="index" @click="actionsEdit(item.id)" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-				:extra="item.distance === -1 ? '' : Math.round(item.distance * 1000) / 1000 + '公里'">
+				:extra="item.distance === -1 || item.distance === 0 || item.distance === null ? '' : Math.round(item.distance * 1000) / 1000 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
 					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
@@ -235,11 +235,11 @@
 				return time < (60 * 60) ? '' : '小时'
 			},
 			getMinute (time) {
-				if (Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0 && time !== 0) return ''
 				return Math.ceil((time / 60) % 60)
 			},
 			getMinuteType (time) {
-				if (Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0 && time !== 0) return ''
 				return '分钟'
 			},
 		}
