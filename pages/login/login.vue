@@ -77,6 +77,11 @@
 				}
 			}
 		},
+		computed: {
+			lastRoute() {
+				return this.$store.state.lastRoute
+			}
+		},
 		mounted(){
 			this.getAccount()
 		},
@@ -116,9 +121,18 @@
 				})
 				data.account = this.formData.phone
 				this.$store.commit("UPDATEUSERS", data)
-				uni.navigateTo({
-				    url: '/pages/person/index'
-				});
+				console.log(this.lastRoute, 'this.lastRoute')
+				if (this.lastRoute) {
+					const item = this.lastRoute
+					this.$store.commit("update_last_route", '')
+					uni.navigateTo({
+						url: item
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/person/index'
+					})
+				}
 			}
 		}
 	}

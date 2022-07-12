@@ -1,5 +1,6 @@
 import config from "@/config";  // 配置文件
 import storage from "./storage"; // 缓存封装
+import store from "@/store/index.js"; 
 
 export default {
 	console(options){
@@ -30,7 +31,7 @@ export default {
         // 这里看项目的情况来定，如果是没有token，那就删除这里，上面的storage也不需要引入
 		let users = storage.getJson("users");
 		if(users != null){
-			options.header = { 'Authentication' : users.token };
+			options.header = { 'Authentication' : users.token}
 		}
 		// if ('POST' === options.method) {
 		// 	options.header = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -50,6 +51,8 @@ export default {
 					if (!res.data.code) {
 						resolve(res.data)
 					} else if(res.data.code === 400){
+						const pages = getCurrentPages()
+						store.commit("update_last_route", pages[pages.length - 1].$route.fullPath)
 						uni.navigateTo({
 						    url: '/pages/login/login'
 						});
