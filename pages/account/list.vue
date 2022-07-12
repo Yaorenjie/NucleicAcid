@@ -130,7 +130,7 @@
 		align-items: center;
 		.slot-image{
 			width: auto;
-			height: 26px;
+			height: 32px;
 		}
 	}
 	.uni-navbar__header-container {
