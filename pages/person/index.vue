@@ -66,6 +66,7 @@
 				this.$http.httpPost('/logout/').then((res) => {
 					this.loading = false
 					this.$store.commit("UPDATEUSERS", {});
+					this.$store.commit("update_last_route", '')
 					uni.navigateTo({
 					    url: '/pages/login/login'
 					});
