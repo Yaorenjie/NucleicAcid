@@ -19,7 +19,8 @@ const store = new Vuex.Store({
 			state: 1,
 			latitude: '',
 			longitude: ''
-		}
+		},
+		lastRoute: storage.get("lastRoute")
 	},
 	// 对外方问state属性内容
 	getters: {
@@ -89,6 +90,11 @@ const store = new Vuex.Store({
 		delete_detectionData(state, data){
 			state.detectionData = null;
 			storage.remove(name);
+		},
+		update_last_route(state, data){
+			state.lastRoute = data
+			console.log(data)
+			storage.set("lastRoute", data)
 		},
 	},
 	// Action 可以包含任意异步操作
