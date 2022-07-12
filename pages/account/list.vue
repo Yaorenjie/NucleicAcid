@@ -9,7 +9,7 @@
 			</block>
 		</uni-nav-bar>
 		<view class="detection-body">
-			<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
+			<uni-card @click="goMap(item)" v-for="(item, index) in detectionList" :key="index" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
 				:extra="item.distance === -1 || item.distance === 0 || item.distance === null ? '' : Math.round(item.distance) / 1000 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
@@ -113,6 +113,41 @@
 				if (Math.ceil(time / 60 % 60) === 0 && time !== 0) return ''
 				return '分钟'
 			},
+			goMap (item) {
+				this.markertap(item)
+			},
+			//导航到指定位置 ltt lgt
+			markertap(item) {
+				let that = this
+				//调出地图传入目的地 ltt lgt
+				uni.getLocation({
+					success: (res) => {
+						uni.openLocation({
+							latitude: Number(item.latitude),
+							longitude: Number(item.longitude),
+							name: item.name,
+							address: item.fullAddress,
+							success: function() {
+								console.log('success');
+							},
+							fail: function() {
+								uni.showModal({
+									title: '错误',
+									content: '请检查定位是否打开',
+									showCancel: false,
+									success: function(res) {
+										if (res.confirm) {
+											console.log('用户点击确定');
+										} else if (res.cancel) {
+											console.log('用户点击取消');
+										}
+									}
+								})
+							}
+						});
+					}
+				})
+			}
 		}
 	}
 </script>

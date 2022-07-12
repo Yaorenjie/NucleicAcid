@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<uni-card v-for="item in adminList" :title="item.company" :isFull="true" :sub-title="item.comment" :extra="item.contractStartAt+' 至 '+item.contractEndAt">
+		<uni-card @click="goMap(item)" v-for="item in adminList" :title="item.company" :isFull="true" :sub-title="item.comment" :extra="item.contractStartAt+' 至 '+item.contractEndAt">
 			<view class="uni-flex uni-row uni-align-center">
 				<uni-icons type="person" size="24"></uni-icons>
 				<text class="uni-h4 uni-ml5">{{item.name}}</text>
@@ -115,6 +115,12 @@
 				    animationType: 'slide-in-right',
 				    animationDuration: 200
 				});
+			},
+			goMap (item) {
+				console.log(item)
+				// uni.navigateTo({
+				//     url: '/pages/map/index'
+				// })
 			}
 		}
 	}
