@@ -93,7 +93,7 @@
 				this.$http.httpPost('/admin/',this.valiFormData).then(res => {
 					uni.showModal({
 						title: '温馨提示',
-						content: '添加成功，请记住密码为'+this.valiFormData.password,
+						content: '添加成功，请记住密码为：'+this.valiFormData.password,
 						showCancel: false,
 						success: function (res) {
 							if (res.confirm) {
