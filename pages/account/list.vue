@@ -115,7 +115,7 @@
 			},
 			goMap (item) {
 				uni.navigateTo({
-					url: '/pages/map/index?latitude=' + item.latitude + '&longitude=' + item.longitude + '&personLatitude=' + this.search.latitude + '&personlongitude=' + this.search.longitude + '&name=' + item.name
+					url: '/pages/map/index?latitude=' + item.latitude + '&longitude=' + item.longitude + '&personLatitude=' + this.search.latitude + '&personlongitude=' + this.search.longitude + '&name=' + item.name + '&fullAddress=' + item.fullAddress
 				})
 				// const url = `https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=我的位置&fromcoord=${this.search.latitude},${this.search.longitude}&to=${item.name}&tocoord=${item.latitude},${item.longitude}&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
 				// uni.navigateTo({
@@ -126,35 +126,6 @@
 				// 			&to=${item.name}&tocoord=${item.latitude},${item.longitude}
 				// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
 				// console.log(url)
-			},
-			markertap() {
-				uni.getLocation({
-					success: (res) => {
-						uni.openLocation({
-							latitude: Number(this.latitude),
-							longitude: Number(this.longitude),
-							name: this.name,
-							address: this.fullAddress,
-							success: function() {
-								console.log('success');
-							},
-							fail: function() {
-								uni.showModal({
-									title: '错误',
-									content: '请检查定位是否打开',
-									showCancel: false,
-									success: function(res) {
-										if (res.confirm) {
-											console.log('用户点击确定');
-										} else if (res.cancel) {
-											console.log('用户点击取消');
-										}
-									}
-								})
-							}
-						})
-					}
-				})
 			}
 		}
 	}

@@ -1,6 +1,9 @@
 <template>
 <view class="container">
 	<web-view :src="url"></web-view>
+	<view class="btn" @click="markertap">
+		<img src="/static/navigation.png" />
+	</view>
 </view>
 </template>
 
@@ -15,7 +18,8 @@
 					latitude: 0,
 					longitude: 0,
 				},
-				name: ''
+				name: '',
+				fullAddress: ''
 			}
 		},
 		onLoad(e) {
@@ -34,14 +38,62 @@
 			if (e.name) {
 				this.name = e.name
 			}
-			const url =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
-						&from=我的位置&fromcoord=${this.reportInfo.latitude},${this.reportInfo.longitude}
-						&to=${this.name}&tocoord=${this.latitude},${this.longitude}
-						&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
+			if (e.fullAddress) {
+				this.fullAddress = e.fullAddress
+			}
+			// const url =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
+			// 			&from=我的位置&fromcoord=${this.reportInfo.latitude},${this.reportInfo.longitude}
+			// 			&to=${this.name}&tocoord=${this.latitude},${this.longitude}
+			// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
+			const url = `https://detection.heshengshe.com/map.html?startLat=${this.reportInfo.latitude}&startLong=${this.reportInfo.longitude}&endLat=${this.latitude}&endLong=${this.longitude}&endName=${this.name}`
 			this.url = url
+		},
+		methods: {
+			markertap() {
+				uni.getLocation({
+					type: 'gcj02',
+					success: (res) => {
+						uni.openLocation({
+							latitude: parseFloat(this.latitude),
+							longitude: parseFloat(this.longitude),
+							name: this.name,
+							address: this.fullAddress,
+							success: function() {
+								console.log('success');
+							},
+							fail: function() {
+								uni.showModal({
+									title: '错误',
+									content: '请检查定位是否打开',
+									showCancel: false
+								})
+							}
+						})
+					}
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.btn{
+		position: fixed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 10;
+		border-radius: 45px;
+		box-shadow: 0 1px 8px 1px rgab(165,165,165, 0.2);
+		right: calc(15px + var(--window-right));
+		bottom: calc(30px + var(--window-bottom));
+		z-index: 100;
+		width: 55px;
+		height: 55px;
+		background-color: rgb(2, 96, 162);
+		img {
+			width: 32px;
+			height: 30px;
+		}
+	}
 </style>
