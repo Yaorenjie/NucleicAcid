@@ -58,6 +58,10 @@
                     "key" : "TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU"
                 }
             }
+        },
+        "template" : "",
+        "router" : {
+            "mode" : "history"
         }
     }
 }
