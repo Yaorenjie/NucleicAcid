@@ -114,9 +114,9 @@
 				return '分钟'
 			},
 			goMap (item) {
-				uni.navigateTo({
-					url: '/pages/map/index?latitude=' + item.latitude + '&longitude=' + item.longitude + '&personLatitude=' + this.search.latitude + '&personlongitude=' + this.search.longitude + '&name=' + item.name + '&fullAddress=' + item.fullAddress
-				})
+				// uni.navigateTo({
+				// 	url: '/pages/map/index?latitude=' + item.latitude + '&longitude=' + item.longitude + '&personLatitude=' + this.search.latitude + '&personlongitude=' + this.search.longitude + '&name=' + item.name + '&fullAddress=' + item.fullAddress
+				// })
 				// const url = `https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=我的位置&fromcoord=${this.search.latitude},${this.search.longitude}&to=${item.name}&tocoord=${item.latitude},${item.longitude}&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
 				// uni.navigateTo({
 				// 	url: '/pages/map/index?url=' + url
@@ -126,6 +126,25 @@
 				// 			&to=${item.name}&tocoord=${item.latitude},${item.longitude}
 				// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
 				// console.log(url)
+				this.markertap(item)
+			},
+			markertap(item) {
+				uni.openLocation({
+					latitude: item.latitude,
+					longitude: item.longitude,
+					name: item.name,
+					address: item.fullAddress,
+					success: function() {
+						console.log('success');
+					},
+					fail: function() {
+						uni.showModal({
+							title: '错误',
+							content: '请检查定位是否打开',
+							showCancel: false
+						})
+					}
+				})
 			}
 		}
 	}

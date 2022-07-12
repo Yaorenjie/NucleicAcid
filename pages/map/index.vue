@@ -42,11 +42,11 @@
 			if (e.fullAddress) {
 				this.fullAddress = e.fullAddress
 			}
-			// const url =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
-			// 			&from=我的位置&fromcoord=${this.reportInfo.latitude},${this.reportInfo.longitude}
-			// 			&to=${this.name}&tocoord=${this.latitude},${this.longitude}
-			// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
-			const url = `https://detection.heshengshe.com/map.html?startLat=${this.reportInfo.latitude}&startLong=${this.reportInfo.longitude}&endLat=${this.latitude}&endLong=${this.longitude}&endName=${this.name}`
+			const url =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
+						&from=我的位置&fromcoord=${this.reportInfo.latitude},${this.reportInfo.longitude}
+						&to=${this.name}&tocoord=${this.latitude},${this.longitude}
+						&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
+			// const url = `https://detection.heshengshe.com/map.html?startLat=${this.reportInfo.latitude}&startLong=${this.reportInfo.longitude}&endLat=${this.latitude}&endLong=${this.longitude}&endName=${this.name}`
 			this.url = url
 		},
 		methods: {
