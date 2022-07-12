@@ -11,7 +11,7 @@
 		<view class="detection-body">
 			<uni-card v-for="(item, index) in detectionList" :key="index" class="detection-list"
 				:title="item.name" :isFull="true" :sub-title="item.fullAddress"
-				:extra="item.distance === -1 ? '' : Math.round(item.distance) / 1000 + '公里'">
+				:extra="item.distance === -1 || item.distance === 0 || item.distance === null ? '' : Math.round(item.distance) / 1000 + '公里'">
 				<view class="uni-flex uni-row uni-justify-center uni-align-center">
 					<view class="text">预计等待时间</view>
 					<text class="uni-h1 color-important">{{getHour(item.waitTime)}}</text>
@@ -53,7 +53,7 @@
 					latitude: '',
 					longitude: ''
 				},
-				totalPage: 0,
+				total: 0,
 				loadMoreText: "加载中...",
 				showLoadMore: false
 			}
@@ -62,7 +62,7 @@
 		// 	this.initData()
 		// },
 		onUnload() {
-			this.totalPage = 0
+			this.total = 0
 			this.detectionList = []
 			this.loadMoreText = "加载更多"
 			this.showLoadMore = false
@@ -71,7 +71,7 @@
 			this.initData()
 		},
 		onReachBottom() {
-			if (this.detectionList.length < this.totalPage) {
+			if (this.detectionList.length < this.total) {
 				this.showLoadMore = true
 				let _page=this.search.page
 				_page++
@@ -89,7 +89,7 @@
 			},
 			async getList() {
 				const res = await this.$http.httpGet('/api/point/', this.search)
-				this.totalPage = res.total
+				this.total = res.total
 				if(res.data)this.detectionList.push.apply(this.detectionList,res.data)
 				uni.stopPullDownRefresh()
 			},
@@ -106,12 +106,11 @@
 				return time < (60 * 60) ? '' : '小时'
 			},
 			getMinute (time) {
-				console.log(time, Math.ceil(time / 60))
-				if (Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0 && time !== 0) return ''
 				return Math.ceil((time / 60) % 60)
 			},
 			getMinuteType (time) {
-				if (Math.ceil(time / 60 % 60) === 0) return ''
+				if (Math.ceil(time / 60 % 60) === 0 && time !== 0) return ''
 				return '分钟'
 			},
 		}

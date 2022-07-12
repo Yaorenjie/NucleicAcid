@@ -26,7 +26,7 @@
 			return {
 				page: 1,
 				size: 10,
-				totalPage: 0,
+				total: 0,
 				keyword: "",
 				adminList: [],
 				pattern: {
@@ -48,7 +48,7 @@
 			this.getAdminList()
 		},
 		onUnload() {
-			this.totalPage = 0
+			this.total = 0
 			this.adminList = []
 			this.loadMoreText = "加载更多"
 			this.showLoadMore = false
@@ -59,7 +59,7 @@
 			this.getAdminList()
 		},
 		onReachBottom() {
-			if (this.adminList.length < this.totalPage) {
+			if (this.adminList.length < this.total) {
 				this.showLoadMore = true
 				this.page++;
 				this.getAdminList()
@@ -75,7 +75,7 @@
 					keyword: this.keyword
 				}).then((res) => {
 					if(res.data)this.adminList.push.apply(this.adminList,res.data)
-					this.totalPage = res.total
+					this.total = res.total
 					uni.stopPullDownRefresh()
 				})
 				.catch((error) => {
