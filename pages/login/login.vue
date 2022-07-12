@@ -115,15 +115,10 @@
 					password: this.formData.password
 				})
 				data.account = this.formData.phone
-				this.$store.commit("UPDATEUSERS", data);
-				this.getPermission()
+				this.$store.commit("UPDATEUSERS", data)
 				uni.navigateTo({
 				    url: '/pages/person/index'
 				});
-			},
-			async getPermission() {
-				const data = await this.$http.httpGet('/permission/')
-				this.$store.commit("UPDATEPERMISSION", data);
 			}
 		}
 	}
