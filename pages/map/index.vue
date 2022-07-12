@@ -51,24 +51,19 @@
 		},
 		methods: {
 			markertap() {
-				uni.getLocation({
-					type: 'gcj02',
-					success: (res) => {
-						uni.openLocation({
-							latitude: parseFloat(this.latitude),
-							longitude: parseFloat(this.longitude),
-							name: this.name,
-							address: this.fullAddress,
-							success: function() {
-								console.log('success');
-							},
-							fail: function() {
-								uni.showModal({
-									title: '错误',
-									content: '请检查定位是否打开',
-									showCancel: false
-								})
-							}
+				uni.openLocation({
+					latitude: parseFloat(this.latitude),
+					longitude: parseFloat(this.longitude),
+					name: this.name,
+					address: this.fullAddress,
+					success: function() {
+						console.log('success');
+					},
+					fail: function() {
+						uni.showModal({
+							title: '错误',
+							content: '请检查定位是否打开',
+							showCancel: false
 						})
 					}
 				})
