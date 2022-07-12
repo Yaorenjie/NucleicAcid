@@ -1,5 +1,5 @@
 <template>
-<view class="page-body">
+<view class="container">
 	<web-view :src="url"></web-view>
 </view>
 </template>
@@ -34,7 +34,7 @@
 			if (e.name) {
 				this.name = e.name
 			}
-			const url = location.href =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
+			const url =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
 						&from=我的位置&fromcoord=${this.reportInfo.latitude},${this.reportInfo.longitude}
 						&to=${this.name}&tocoord=${this.latitude},${this.longitude}
 						&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
