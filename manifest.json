@@ -55,13 +55,8 @@
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
-                    "key" : "TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU"
+                    "key" : "Q47BZ-KD6WU-WGRVH-BVJKL-ENWXE-AKBQK"
                 }
-            }
-        },
-        "optimization" : {
-            "treeShaking" : {
-                "enable" : true
             }
         }
     }

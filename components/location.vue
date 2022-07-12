@@ -75,14 +75,7 @@
 				uni.getLocation({
 					geocode: true,
 					success: (res) => {
-						console.log(res.address)
-						console.log(res.altitude)
-						console.log(res.horizontalAccuracy)
-						console.log(res.latitude)
-						console.log(res.speed)
-						console.log(res.verticalAccuracy)
 						this.hasLocation = true;
-						console.log(res.longitude, res.latitude)
 						this.$emit('change', {
 							latitude: res.latitude,
 							longitude: res.longitude

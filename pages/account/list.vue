@@ -114,19 +114,27 @@
 				return '分钟'
 			},
 			goMap (item) {
-				this.markertap(item)
+				uni.navigateTo({
+					url: '/pages/map/index?latitude=' + item.latitude + '&longitude=' + item.longitude + '&personLatitude=' + this.search.latitude + '&personlongitude=' + this.search.longitude + '&name=' + item.name
+				})
+				// const url = `https://apis.map.qq.com/uri/v1/routeplan?type=drive&from=我的位置&fromcoord=${this.search.latitude},${this.search.longitude}&to=${item.name}&tocoord=${item.latitude},${item.longitude}&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
+				// uni.navigateTo({
+				// 	url: '/pages/map/index?url=' + url
+				// })
+				// const url = location.href =`https://apis.map.qq.com/uri/v1/routeplan?type=drive
+				// 			&from=我的位置&fromcoord=${this.search.latitude},${this.search.longitude}
+				// 			&to=${item.name}&tocoord=${item.latitude},${item.longitude}
+				// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
+				// console.log(url)
 			},
-			//导航到指定位置 ltt lgt
-			markertap(item) {
-				let that = this
-				//调出地图传入目的地 ltt lgt
+			markertap() {
 				uni.getLocation({
 					success: (res) => {
 						uni.openLocation({
-							latitude: Number(item.latitude),
-							longitude: Number(item.longitude),
-							name: item.name,
-							address: item.fullAddress,
+							latitude: Number(this.latitude),
+							longitude: Number(this.longitude),
+							name: this.name,
+							address: this.fullAddress,
 							success: function() {
 								console.log('success');
 							},
@@ -144,7 +152,7 @@
 									}
 								})
 							}
-						});
+						})
 					}
 				})
 			}

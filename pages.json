@@ -17,6 +17,14 @@
 		    }
 		},
 		{
+		    "path" : "pages/map/index",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		},
+		{
 		    "path" : "pages/login/login",
 		    "style" :                                                                                    
 		    {
