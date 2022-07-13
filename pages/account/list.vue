@@ -34,14 +34,17 @@
 			</uni-card>
 		</view>
 		<view class="uni-loadmore" v-if="showLoadMore">{{loadMoreText}}</view>
+		<shareMap ref="map" :data='mapData'></shareMap>
 	</view>
 </template>
 
 <script>
 	import location from '@/components/location.vue'
+	import shareMap from '@/components/map.vue'
 	export default {
 		components: {
-			location
+			location,
+			shareMap
 		},
 		data() {
 			return {
@@ -55,7 +58,8 @@
 				},
 				total: 0,
 				loadMoreText: "加载中...",
-				showLoadMore: false
+				showLoadMore: false,
+				mapData: {}
 			}
 		},
 		// onShow() {
@@ -126,7 +130,16 @@
 				// 			&to=${item.name}&tocoord=${item.latitude},${item.longitude}
 				// 			&policy=1&referer=TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU`;
 				// console.log(url)
-				this.markertap(item)
+				// this.markertap(item)
+				// window.location.href = url
+				this.mapData = {
+					...item,
+					search: {
+						latitude: this.search.latitude,
+						longitude: this.search.longitude
+					}
+				}
+				this.$refs.map.open()
 			},
 			markertap(item) {
 				uni.openLocation({
