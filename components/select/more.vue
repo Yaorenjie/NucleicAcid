@@ -105,6 +105,9 @@
 <style lang="scss" scoped>
 	.name {
 		width: 100%;
+		overflow: hidden; //超出的文本隐藏
+		text-overflow: ellipsis; //溢出用省略号显示
+		white-space: nowrap; //溢出则不换行
 	}
 	.select-more-box {
 		.btn-list {
@@ -128,6 +131,13 @@
 
 			.mini-btn {
 				margin: 0;
+			}
+		}
+		.uni-list{
+			overflow: auto;
+			height: calc(100% - 60px);
+			&:after {
+				height: 0;
 			}
 		}
 	}
