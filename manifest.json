@@ -55,9 +55,10 @@
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
-                    "key" : "TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU"
+                    "key" : "Q47BZ-KD6WU-WGRVH-BVJKL-ENWXE-AKBQK"
                 }
             }
-        }
+        },
+        "title" : "核酸检测点智能推荐"
     }
 }
