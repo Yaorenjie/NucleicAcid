@@ -130,5 +130,12 @@
 				margin: 0;
 			}
 		}
+		.uni-list{
+			overflow: auto;
+			height: calc(100% - 60px);
+			&:after {
+				height: 0;
+			}
+		}
 	}
 </style>
