@@ -25,13 +25,34 @@
 		left: 20px;
 		right: 20px;
 		bottom: 100px;
+		padding: 10px;
 		overflow: hidden;
 		z-index: 1000;
-		border-radius: 20px;
+		border-radius: 10px;
 		background-color: #fff;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+	}
+	.list-item{
+		flex: 1;
+	}
+	.list-item p{
+		display: block;
+		text-align: center;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		margin: 0;
+		height: 20px;
+		line-height: 20px;
+	}
+	p.tag,p.distance{
+		font-size: 10px;
+	}
+	p.duration{
+		font-size: 14px;
+		font-weight: bold;
 	}
 </style>
 
@@ -142,27 +163,26 @@ function initMap() {
   driving.search({ from: startPosition, to: endPosition }).then((result) => {
     console.log(result)
     result.result.routes.forEach((res, index) => {
-		let s = `<div class="list-item"><p>${res.tags.join(' ')}</p><p>${dateUtils(res.duration)}</p><p>${distance(res.distance)}</p></div>`
+		let s = `<div class="list-item"><p class="tag">${res.tags.join(' ')}</p><p class="duration">${dateUtils(res.duration)}</p><p class="distance">${distance(res.distance)}</p></div>`
 		console.log(s)
 		document.getElementById('instruction').innerHTML += s;
       // 展示路线引导
+	  displayPolyline(result.result.routes[index].polyline,index); // 绘制路径折线
     });
-	// 搜索路径
-    displayPolyline(result.result.routes[0].polyline); // 绘制路径折线
   });
 }
 
-function displayPolyline(pl) {
+function displayPolyline(pl,index) {
   // 创建 MultiPolyline显示路径折线
   var polylineLayer = new TMap.MultiPolyline({
-    id: 'polyline-layer',
+    id: 'polyline-layer-'+index,
     map: map,
     styles: {
       style_blue: new TMap.PolylineStyle({
-        color: '#3777FF',
+        color: index===0?'rgba(2,96,162,1)':'rgba(2,96,162,.8)',
         width: 8,
-        borderWidth: 5,
-        borderColor: '#FFF',
+        borderWidth: 2,
+        borderColor: index===0?'rgba(1,80,137,1)':'rgba(1,80,137,.8)',
         lineCap: 'round',
       }),
     },
