@@ -85,7 +85,8 @@
 				})
 			},
 			submit() {
-				this.form.id === '' ? this.addAjax() : this.editAjax()
+				console.log(this.form.id,this.form.id==='')
+				this.form.id==='' ? this.addAjax() : this.editAjax()
 			},
 			async editAjax () {
 				this.$http.httpPut('/manager/' + this.form.id + '/',this.form).then(res => {
@@ -103,14 +104,14 @@
 			},
 			async addAjax () {
 				const password = this.randChar()
-				await this.$http.httpPut('/manager/',{
+				await this.$http.httpPost('/manager/',{
 					password,
 					...this.form
 				}).then(res => {
 					uni.showModal({
 						title: '温馨提示',
 						showCancel: false,
-						content: '添加成功，请记住密码为' + password,
+						content: '添加成功，请记住密码为：' + password,
 						success: function (res) {
 							if (res.confirm) {
 								uni.navigateTo({

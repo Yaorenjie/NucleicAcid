@@ -15,7 +15,7 @@
 				roleList: [],
 				page: 1,
 				size: 10,
-				totalPage: 0,
+				total: 0,
 				pattern: {
 					selectedColor: '#0260a2',
 					buttonColor: '#0260a2',
@@ -35,7 +35,7 @@
 			this.getRoleList()
 		},
 		onUnload() {
-			this.totalPage = 0
+			this.total = 0
 			this.roleList = []
 			this.loadMoreText = "加载更多"
 			this.showLoadMore = false
@@ -46,7 +46,7 @@
 			this.getRoleList()
 		},
 		onReachBottom() {
-			if (this.roleList.length < this.totalPage) {
+			if (this.roleList.length < this.total) {
 				this.showLoadMore = true
 				this.page++;
 				this.getRoleList()
@@ -61,7 +61,7 @@
 					size: this.size
 				}).then((res) => {
 					if(res.data)this.roleList.push.apply(this.roleList,res.data)
-					this.totalPage = res.total
+					this.total = res.total
 					uni.stopPullDownRefresh()
 				})
 				.catch((error) => {

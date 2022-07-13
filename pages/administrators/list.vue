@@ -33,7 +33,7 @@
 					size: 10,
 					keyword: "",
 				},
-				totalPage: 0,
+				total: 0,
 				pattern: {
 					selectedColor: '#0260a2',
 					buttonColor: '#0260a2',
@@ -51,7 +51,7 @@
 			this.initList()
 		},
 		onUnload() {
-			this.totalPage = 0
+			this.total = 0
 			this.adminList = []
 			this.loadMoreText = "加载更多"
 			this.showLoadMore = false
@@ -60,7 +60,7 @@
 		    this.initList()
 		},
 		onReachBottom(){
-			if(this.adminList.length < this.totalPage){
+			if(this.adminList.length < this.total){
 				let _page=this.search.page
 				_page++
 				this.$set(this.search,'page',_page)
@@ -89,7 +89,7 @@
 				this.status = 'loading';
 				const res = await this.$http.httpGet('/manager/', this.search)
 				if(res.data)this.adminList.push.apply(this.adminList,res.data)
-				this.totalPage = res.total
+				this.total = res.total
 				uni.stopPullDownRefresh()
 			},
 			editCk (item) {

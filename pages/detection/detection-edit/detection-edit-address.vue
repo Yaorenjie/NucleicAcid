@@ -96,6 +96,7 @@
 			doGetLocation() {
 				uni.getLocation({
 					geocode: true,
+					type: 'gcj02',
 					success: (res) => {
 						console.log(res.address)
 						console.log(res.altitude)

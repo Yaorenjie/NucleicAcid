@@ -1,5 +1,5 @@
 {
-    "name" : "NucleicAcid",
+    "name" : "核酸检测点智能推荐系统",
     "appid" : "__UNI__BE65F1C",
     "description" : "",
     "versionName" : "1.0.0",
@@ -58,10 +58,6 @@
                     "key" : "TKUBZ-D24AF-GJ4JY-JDVM2-IBYKK-KEBCU"
                 }
             }
-        },
-        "template" : "",
-        "router" : {
-            "mode" : "history"
         }
     }
 }

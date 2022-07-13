@@ -70,7 +70,7 @@
 						active: false
 					}
 				],
-				totalPage: 0,
+				total: 0,
 				loadMoreText: "加载中...",
 				showLoadMore: false
 			}
@@ -80,7 +80,7 @@
 			this.initData()
 		},
 		onUnload() {
-			this.totalPage = 0
+			this.total = 0
 			this.detectionList = []
 			this.loadMoreText = "加载更多"
 			this.showLoadMore = false
@@ -89,7 +89,8 @@
 			this.initData()
 		},
 		onReachBottom() {
-			if (this.detectionList.length < this.totalPage) {
+			console.log(111)
+			if (this.detectionList.length < this.total) {
 				this.showLoadMore = true
 				let _page=this.search.page
 				_page++
@@ -150,7 +151,7 @@
 			},
 			async getList() {
 				const res = await this.$http.httpGet('/admin/point/', this.search)
-				this.totalPage = res.total
+				this.total = res.total
 				if(res.data)this.detectionList.push.apply(this.detectionList,res.data)
 				uni.stopPullDownRefresh()
 			},

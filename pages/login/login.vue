@@ -157,7 +157,7 @@
 			margin: 100rpx 0;
 			text-align: center;
 			.slot-image{
-				width: 400rpx;
+				width: 240rpx;
 				height: auto;
 			}
 		}
